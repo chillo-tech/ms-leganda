@@ -1,10 +1,10 @@
 spring:
   data:
     mongodb:
-      username: rleganda
-      password: rleganda
+      username: root
+      password: appPa2SW$d
       database: db-leganda
-      host: db-leganda
+      host: db-applications
       authentication-database: admin
   mail:
     host: mail-server

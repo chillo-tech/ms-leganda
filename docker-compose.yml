@@ -1,16 +1,16 @@
-version: '3.5'
+version: '3.8'
 services:
   ms-app:
     container_name: ms-leganda
     restart: always
     image: '$REGISTRY/ms-leganda:latest'
     ports:
-      - "9090:9090"
+      - "27190:9090"
     networks:
-      - applications
+      - applications-network
 
-networks:
+applications-network:
   applications:
     external:
-      name: leganda-network
+      name: applications-network
 
