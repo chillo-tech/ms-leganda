@@ -1,10 +1,10 @@
 spring:
   data:
     mongodb:
-      username: rambao
-      password: rambao
+      username: rleganda
+      password: rleganda
       database: db-leganda
-      host: db-ambao
+      host: db-leganda
       authentication-database: admin
   mail:
     host: mail-server
