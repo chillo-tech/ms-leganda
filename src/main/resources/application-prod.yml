@@ -24,6 +24,12 @@ spring:
     protocol: smtp
     test-connection: false
 
+  sms:
+    twilo:
+      sid: ACe77e624544e47a28eed3a64b9f4a3034
+      token: 842d2953ed459f4dce1b137067236612
+      vaid: VA3e5f9431207ecca533d88af99860d7fd
+
 provider:
   stripe:
     secret-key: sk_test_51IGpLUHU7kKe8gmPt3PSfmD2Xbalw8eBuwRJGXwkrfxrTkvnHzvjPspcAjr3vLRTDMCpf52HUE0TOlyTE3CAUsaK007fmGY5bG
