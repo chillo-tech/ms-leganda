@@ -9,8 +9,8 @@ services:
     networks:
       - applications-network
 
-applications-network:
-  applications:
+networks:
+  applications-network:
     external:
       name: applications-network
 
