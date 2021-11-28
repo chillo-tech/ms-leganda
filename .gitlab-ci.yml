@@ -1,6 +1,6 @@
 variables:
-  APP_LOCATION: /opt/applications/ambao/ms-ambao
-  APP_NAME: ms-ambao
+  APP_LOCATION: /opt/applications/leganda/ms-leganda
+  APP_NAME: ms-leganda
   USERNAME: $TEST_SERVER_USERNAME
   SERVER: $TEST_SERVER
 include:
