@@ -1,0 +1,30 @@
+spring:
+  data:
+    mongodb:
+      username: rambao
+      password: rambao
+      database: db-leganda
+      host: db-ambao
+      authentication-database: admin
+  mail:
+    host: mail-server
+    activation-url: https://leganda.chillo.fr/activate
+    new-password-url: https://leganda.chillo.fr/nouveau-mot-de-passe
+    annonces-url: https://leganda.chillo.fr/demenagements
+    paiement-url: https://leganda.chillo.fr/compte/paiement
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            trust: "*"
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
+
+provider:
+  stripe:
+    secret-key: sk_test_51IGpLUHU7kKe8gmPt3PSfmD2Xbalw8eBuwRJGXwkrfxrTkvnHzvjPspcAjr3vLRTDMCpf52HUE0TOlyTE3CAUsaK007fmGY5bG
+    public-key: pk_test_51IGpLUHU7kKe8gmPN8Mpm9zYXhi1L8PX2qPreTOKxBhOWqzQrojbyB25D98FMtdBZVMPSsQV2W9qygUOnAioKgaQ006TDtzpbG

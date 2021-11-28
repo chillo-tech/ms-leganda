@@ -1,0 +1,35 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /api
+  session.tracking-modes: 'cookie'
+mongock:
+  change-logs-scan-package:
+  - com.ams.ambao.config.db.changelog
+spring:
+  application:
+    name: ms-leganda
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+  mail:
+    default-encoding: UTF-8
+    protocol: smtp
+    test-connection: false
+jwt:
+  header: "TOKEN_PAYLOAD"
+  infos: "USER_INFOS"
+  secret: "AL_KEY"
+  expiration: 3600 # (secondes) == 1 heure
+  route:
+    authentication:
+      path: "/login"
+      refresh: "/refresh"
+
+providers:
+  mapbox:
+    domain: "https://api.mapbox.com"
+    places: "geocoding/v5/mapbox.places"
+    access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJja3Zvd3EzcmswaThkMnZrZ25iYmtveDBhIn0.pDR7pKL18d3iz5NoaRmWYg"
