@@ -5,6 +5,7 @@ spring:
       password: appPa2SW$d
       database: db-leganda
       host: db-applications
+      port: 27117
       authentication-database: admin
   mail:
     host: mail-server
