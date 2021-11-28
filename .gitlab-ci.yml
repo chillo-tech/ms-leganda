@@ -1,0 +1,11 @@
+variables:
+  APP_LOCATION: /opt/applications/ambao/ms-ambao
+  APP_NAME: ms-ambao
+  USERNAME: $TEST_SERVER_USERNAME
+  SERVER: $TEST_SERVER
+include:
+  - project: tech/pipelines
+    file: .gitlab-ci-backend-template.yml
+  - project: tech/pipelines
+    file: .gitlab-ci-dockerise-deploy.yml
+
