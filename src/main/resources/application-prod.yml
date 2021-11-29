@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://root:appPa2SW$d@db-applications:27117
+      uri: mongodb://root:appPa2SW$d@db-applications
       database: db-leganda
       authentication-database: admin
   mail:
