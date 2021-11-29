@@ -1,8 +1,10 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://root:appPa2SW$d@db-applications
+      username: root
+      password: appPa2SW$d
       database: db-leganda
+      host: db-applications
       authentication-database: admin
   mail:
     host: mail-server
