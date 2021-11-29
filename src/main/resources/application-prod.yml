@@ -2,7 +2,7 @@ spring:
   data:
     mongodb:
       username: root
-      password: appPa2SW$d
+      password: 'appPa2SW$d'
       database: db-leganda
       host: db-applications
       authentication-database: admin
