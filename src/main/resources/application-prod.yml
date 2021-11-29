@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-      username: rapplications
-      password: rapplications
+      #username: rapplications
+      #password: rapplications
       database: db-leganda
       host: db-applications
       authentication-database: admin

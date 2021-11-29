@@ -9,9 +9,11 @@ management:
 spring:
   data:
     mongodb:
-      database: db-leganda
+      #username: rmongo
+      #password: rambao
+      database: db-ambao
       host: localhost
-      port: 27017
+      port: 27117
       authentication-database: admin
 
   mail:
