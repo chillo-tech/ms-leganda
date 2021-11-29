@@ -4,7 +4,7 @@ spring:
       #username: rapplications
       #password: rapplications
       database: db-leganda
-      host: db-applications
+      host: db-mongo
       authentication-database: admin
   mail:
     host: mail-server
