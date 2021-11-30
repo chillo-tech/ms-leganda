@@ -12,7 +12,6 @@ spring:
      new-password-url: https://demenous.chillo.fr/nouveau-mot-de-passe
      annonces-url: https://demenous.chillo.fr/demenagements
      paiement-url: https://demenous.chillo.fr/compte/paiement
-     test-connection: true
 
   sms:
     twilo:
