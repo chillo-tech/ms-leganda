@@ -28,7 +28,7 @@ spring:
     twilo:
       sid: ACe77e624544e47a28eed3a64b9f4a3034
       token: 842d2953ed459f4dce1b137067236612
-      vaid: VA3e5f9431207ecca533d88af99860d7fd
+      vaid: VA02c1d5c62479df1d650efd578513cb78
 
 provider:
   stripe:
