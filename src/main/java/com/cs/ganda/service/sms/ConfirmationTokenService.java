@@ -62,15 +62,20 @@ public class ConfirmationTokenService {
             log.warn("Le compte a été activé après 15 minutes");
         }
 
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        VerificationCheck verificationCheck = VerificationCheck.creator(
-                        VA_ID,
-                        activationData.getToken()
-                ).setTo(activationData.getPhoneIndex() + activationData.getPhone())
-                .create();
+        try {
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            VerificationCheck verificationCheck = VerificationCheck.creator(
+                            VA_ID,
+                            activationData.getToken()
+                    ).setTo(activationData.getPhoneIndex() + activationData.getPhone())
+                    .create();
 
-        confirmationToken.getProfile().setActive(Boolean.TRUE);
-        confirmationToken.setConfirmedAt(Instant.now());
+            confirmationToken.getProfile().setActive(Boolean.TRUE);
+            confirmationToken.setConfirmedAt(Instant.now());
+            log.info("Statut de verification {}", verificationCheck.getStatus());
+        } catch (Exception e) {
+            log.error("Erreur {}", e);
+        }
     }
 
 
