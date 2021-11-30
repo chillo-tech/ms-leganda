@@ -5,6 +5,7 @@ spring:
       #password: rapplications
       database: db-leganda
       host: db-mongo
+      port: 27117
       authentication-database: admin
   mail:
     host: mail-server
