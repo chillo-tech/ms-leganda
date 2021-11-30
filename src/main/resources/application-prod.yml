@@ -7,7 +7,8 @@ spring:
       host: db-mongo
       authentication-database: admin
   mail:
-    host: mail-server
+    host: localhost
+    port: 28825
     activation-url: https://leganda.chillo.fr/activate
     new-password-url: https://leganda.chillo.fr/nouveau-mot-de-passe
     annonces-url: https://leganda.chillo.fr/demenagements
@@ -22,7 +23,7 @@ spring:
           starttls:
             enable: true
     protocol: smtp
-    test-connection: false
+    test-connection: true
 
   sms:
     twilo:
