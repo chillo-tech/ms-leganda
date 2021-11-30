@@ -23,7 +23,7 @@ spring:
           starttls:
             enable: true
     protocol: smtp
-    test-connection: false
+    test-connection: true
 
   sms:
     twilo:
