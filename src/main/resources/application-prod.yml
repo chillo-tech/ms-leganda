@@ -8,7 +8,6 @@ spring:
       authentication-database: admin
   mail:
     host: mail-server
-    port: 28825
     activation-url: https://leganda.chillo.fr/activate
     new-password-url: https://leganda.chillo.fr/nouveau-mot-de-passe
     annonces-url: https://leganda.chillo.fr/demenagements
