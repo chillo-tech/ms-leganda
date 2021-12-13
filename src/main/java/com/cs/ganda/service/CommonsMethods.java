@@ -18,8 +18,8 @@ public class CommonsMethods {
 
     public Status getStatusFromDates(final Validity start, final Validity end) {
         final Instant now = Instant.now();
-        final long daysBeforeStartDate = ChronoUnit.DAYS.between(now, start.getDate().toInstant());
-        final long daysBeforeEndDate = ChronoUnit.DAYS.between(now, end.getDate().toInstant());
+        final long daysBeforeStartDate = ChronoUnit.DAYS.between(now, start.getDate());
+        final long daysBeforeEndDate = ChronoUnit.DAYS.between(now, end.getDate());
 
         if (daysBeforeEndDate < 0) {
             return CLOSED;

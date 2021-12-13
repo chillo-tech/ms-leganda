@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
@@ -23,6 +24,7 @@ public class Profile {
     @NotBlank
     private String lastName;
     private String email;
+    @Indexed(unique = true)
     @NotBlank
     private String phone;
     private String phoneIndex = "+33";

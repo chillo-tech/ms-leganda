@@ -2,12 +2,10 @@ package com.cs.ganda.service.impl;
 
 import com.cs.ganda.service.CRUDService;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
 import java.util.Objects;
 
 import static com.cs.ganda.datas.Constant.MISSING_FIELD;
@@ -21,15 +19,11 @@ public abstract class CRUDServiceImpl<T, ID> implements CRUDService<T, ID> {
         this.repo = repo;
     }
 
-    @Override
-    public List<T> search() {
-        Iterable<T> all = this.repo.findAll();
-        return Lists.newArrayList(all);
-    }
 
     @Override
     public T create(T t) {
-        return this.repo.save(t);
+        this.repo.save(t);
+        return null;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.cs.ganda.service;
 
-import java.util.List;
-
 public interface CRUDService<T, ID> {
-    List<T> search();
 
     T create(T t);
 

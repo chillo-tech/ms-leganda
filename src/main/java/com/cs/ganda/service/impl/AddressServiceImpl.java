@@ -3,6 +3,7 @@ package com.cs.ganda.service.impl;
 import com.cs.ganda.api.MapBoxClient;
 import com.cs.ganda.document.Address;
 import com.cs.ganda.document.Location;
+import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.repository.AddressRepository;
 import com.cs.ganda.service.AddressService;
 import com.cs.ganda.service.CommonsMethods;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -67,5 +69,10 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
                     address.setCoordinates(new Location(type, latLong));
                     return address;
                 }).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<Address> search(SearchParamsDTO searchParams) {
+        return null;
     }
 }

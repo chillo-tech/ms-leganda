@@ -18,6 +18,12 @@ spring:
     default-encoding: UTF-8
     protocol: smtp
     test-connection: false
+
+  sms:
+    twilo:
+      sid: ACfcdf940b8002b861521b6e9b8f00a65e
+      token: fe7b0d004cc05005832438a6b6c3efbf
+      vaid: VA600e34ba66f214ed2f209b61584e310e
 jwt:
   header: "TOKEN_PAYLOAD"
   infos: "USER_INFOS"

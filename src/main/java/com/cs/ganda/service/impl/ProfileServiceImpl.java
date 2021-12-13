@@ -22,8 +22,8 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void register(Profile profile) {
         profile.setActive(FALSE);
-        this.profileRepository.save(profile);
         this.confirmationTokenService.sendActivationCode(profile);
+        this.profileRepository.save(profile);
     }
 
     @Override

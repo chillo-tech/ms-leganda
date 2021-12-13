@@ -21,8 +21,8 @@ public abstract class ApplicationController<T, ID extends Serializable> {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@Valid @RequestBody T json) {
-        this.service.create(json);
+    public T save(@Valid @RequestBody T json) {
+        return this.service.create(json);
     }
 
     @GetMapping(value = "/{id}")

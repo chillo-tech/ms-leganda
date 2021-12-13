@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -30,12 +31,12 @@ public class AccountService {
     public void activate(ActivationData activationData) {
         Profile profile = this.profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
         Objects.requireNonNull(activationData.getToken(), String.format(MISSING_FIELD, "token"));
-        this.confirmationTokenService.activate(activationData);
+        this.confirmationTokenService.activate(activationData.getItemId(), activationData.getPhone(), activationData.getPhoneIndex(), activationData.getToken());
         profile.setActive(Boolean.TRUE);
         this.profilRepository.save(profile);
     }
 
-    public void register(Profile profile) {
+    public Profile register(Profile profile) {
         Objects.requireNonNull(profile.getFirstName(), String.format(MISSING_FIELD, "Prénom"));
         Objects.requireNonNull(profile.getLastName(), String.format(MISSING_FIELD, "Nom"));
         if (this.commonsMethods.stringIsNullOrEmpty(profile.getEmail()) && this.commonsMethods.stringIsNullOrEmpty(profile.getPhone())) {
@@ -45,13 +46,14 @@ public class AccountService {
                 throw new IllegalArgumentException(String.format(EMAIL_INVALID, profile.getEmail()));
             }
         }
-
-        boolean userWithPhoneExists = this.profilRepository.findTopByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex()).isPresent();
+        Optional<Profile> savedProfile = this.profilRepository.findTopByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
+        boolean userWithPhoneExists = savedProfile.isPresent();
         if (!userWithPhoneExists) {
             this.profileService.register(profile);
         } else {
-            this.confirmationTokenService.sendActivationCode(profile);
+            return savedProfile.get();
         }
+        return null;
     }
 
 }

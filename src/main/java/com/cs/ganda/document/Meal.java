@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.List;
+
+import static java.lang.Boolean.FALSE;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,19 +24,15 @@ public class Meal {
     private String name;
     private String description;
     private String image;
-    private String price;
-    private int vues;
+    private double price;
+    private int views;
     private Status status;
     private Instant creation;
+    private Boolean active = FALSE;
 
-    @DBRef
     private Address address;
-    @DBRef
     private Profile profile;
-    @DBRef
     private Validity validity;
-
-    @DBRef
     private List<Picture> pictures;
 
 }

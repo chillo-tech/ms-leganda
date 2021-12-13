@@ -11,7 +11,7 @@ spring:
     mongodb:
       #username: rmongo
       #password: rambao
-      database: db-ambao
+      database: db-leganda
       host: localhost
       port: 27117
       authentication-database: admin
@@ -35,13 +35,17 @@ spring:
     protocol: smtp
     test-connection: true
 
-  sms:
-    twilo:
-      sid: ACe77e624544e47a28eed3a64b9f4a3034
-      token: 842d2953ed459f4dce1b137067236612
-      vaid: VA3e5f9431207ecca533d88af99860d7fd
 
 provider:
   stripe:
     secret-key: sk_test_51IGpLUHU7kKe8gmPt3PSfmD2Xbalw8eBuwRJGXwkrfxrTkvnHzvjPspcAjr3vLRTDMCpf52HUE0TOlyTE3CAUsaK007fmGY5bG
     public-key: pk_test_51IGpLUHU7kKe8gmPN8Mpm9zYXhi1L8PX2qPreTOKxBhOWqzQrojbyB25D98FMtdBZVMPSsQV2W9qygUOnAioKgaQ006TDtzpbG
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: TRACE
+
+resources:
+  images:
+    folder: "/images/applications/leganda/images"
+    host: "http://localhost:27191/images"

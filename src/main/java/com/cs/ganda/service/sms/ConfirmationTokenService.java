@@ -1,16 +1,17 @@
 package com.cs.ganda.service.sms;
 
-import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.ConfirmationToken;
 import com.cs.ganda.document.Profile;
+import com.cs.ganda.enums.Status;
+import com.cs.ganda.exception.ResourceNotFoundException;
 import com.cs.ganda.repository.ConfirmationTokenRepository;
 import com.twilio.Twilio;
+import com.twilio.exception.ApiException;
 import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,6 +24,8 @@ import java.util.Optional;
 public class ConfirmationTokenService {
 
     private static final String ACCOUNT_NOT_EXISTS = "Aucun compte ne correspond à %s %s";
+    private static final String INVALID_PHONE_NUMBER = "Votre numéro de téléphone est invalide";
+    private static final String VALIDATION_CODE_NOT_EXISTS = "Le code saisi est invalide.";
     private final ConfirmationTokenRepository confirmationTokenRepository;
     @Value("${spring.sms.twilo.sid}")
     String ACCOUNT_SID;
@@ -31,28 +34,58 @@ public class ConfirmationTokenService {
     @Value("${spring.sms.twilo.vaid}")
     String VA_ID;
 
-    @Async
     public void sendActivationCode(Profile profile) {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        Verification verification = Verification.creator(
-                        VA_ID,
-                        profile.getPhoneIndex() + profile.getPhone(),
-                        "sms")
-                .create();
+        try {
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            Verification verification = Verification.creator(
+                            VA_ID,
+                            profile.getPhoneIndex() + profile.getPhone(),
+                            "sms")
+                    .create();
 
-        ConfirmationToken confirmationToken = new ConfirmationToken();
-        confirmationToken.setToken(verification.getUrl().getRawQuery());
-        confirmationToken.setProfile(profile);
-        confirmationToken.setCreation(Instant.now());
-        confirmationTokenRepository.save(confirmationToken);
+            ConfirmationToken confirmationToken = new ConfirmationToken();
+            confirmationToken.setToken(verification.getUrl().getRawQuery());
+            confirmationToken.setProfile(profile);
+            confirmationToken.setCreation(Instant.now());
+            confirmationTokenRepository.save(confirmationToken);
+        } catch (ApiException e) {
+            log.error("{}", e);
+            throw new ResourceNotFoundException(INVALID_PHONE_NUMBER);
+        }
     }
 
+    public void sendAddActivationCode(String itemId, String phoneIndex, String phone, String adId) {
+        try {
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            Verification verification = Verification.creator(
+                            VA_ID,
+                            phoneIndex + phone,
+                            "sms")
+                    .create();
 
-    public void activate(ActivationData activationData) {
+            ConfirmationToken confirmationToken = new ConfirmationToken();
+            confirmationToken.setToken(verification.getUrl().getRawQuery());
+            confirmationToken.setPhone(phone);
+            confirmationToken.setItemId(itemId);
+            confirmationToken.setPhoneIndex(phoneIndex);
+            confirmationToken.setAdId(adId);
+            confirmationToken.setCreation(Instant.now());
+            confirmationToken.setStatus(Status.ACTIVE);
+            confirmationToken.setConfirmedAt(null);
+            confirmationTokenRepository.save(confirmationToken);
+        } catch (ApiException e) {
+            log.error("{}", e);
+            throw new ResourceNotFoundException(INVALID_PHONE_NUMBER);
+        }
+    }
+
+    public ConfirmationToken activate(String itemId, String phone, String phoneIndex, String token) {
         Optional<ConfirmationToken> optionalConfirmationToken =
-                this.confirmationTokenRepository.findTopByProfilePhoneAndProfilePhoneIndexOrderByCreationDesc(
-                        activationData.getPhone(),
-                        activationData.getPhoneIndex()
+                this.confirmationTokenRepository.findTopByItemIdAndPhoneAndPhoneIndexAndStatus(
+                        itemId,
+                        phone,
+                        phoneIndex,
+                        Status.ACTIVE
                 );
         if (optionalConfirmationToken.isEmpty()) {
             throw new IllegalStateException(String.format(ACCOUNT_NOT_EXISTS, "le téléphone", "fourni"));
@@ -66,15 +99,16 @@ public class ConfirmationTokenService {
             Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
             VerificationCheck verificationCheck = VerificationCheck.creator(
                             VA_ID,
-                            activationData.getToken()
-                    ).setTo(activationData.getPhoneIndex() + activationData.getPhone())
+                            token
+                    ).setTo(phoneIndex + phone)
                     .create();
-
-            confirmationToken.getProfile().setActive(Boolean.TRUE);
+            confirmationToken.setStatus(Status.CLOSED);
             confirmationToken.setConfirmedAt(Instant.now());
             log.info("Statut de verification {}", verificationCheck.getStatus());
-        } catch (Exception e) {
+            return this.confirmationTokenRepository.save(confirmationToken);
+        } catch (ApiException e) {
             log.error("Erreur {}", e);
+            throw new ResourceNotFoundException(VALIDATION_CODE_NOT_EXISTS);
         }
     }
 

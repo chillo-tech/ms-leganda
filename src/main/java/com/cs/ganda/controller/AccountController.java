@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,10 +25,13 @@ public class AccountController {
         this.accountService.activate(activationData);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "add-profile", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void inscription(@RequestBody @Valid Profile profile) {
-        this.accountService.register(profile);
+    public ResponseEntity inscription(@RequestBody @Valid Profile profile) {
+        Profile savedprofile = this.accountService.register(profile);
+        if (savedprofile != null) {
+            return ResponseEntity.ok(savedprofile);
+        }
+        return ResponseEntity.accepted().build();
     }
 
 }

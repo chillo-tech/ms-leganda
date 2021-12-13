@@ -1,26 +1,22 @@
 package com.cs.ganda.document;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 
-import java.util.Date;
+import java.time.Instant;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Document(value = "VALIDITY")
 public class Validity {
-    @Id
-    private String id;
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private Date date;
-    private String start;
-    private String end;
+    @Indexed
+    private Instant date;
+    @Indexed
+    private Instant start;
+    private Instant end;
 }

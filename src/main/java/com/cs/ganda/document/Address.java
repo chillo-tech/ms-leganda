@@ -1,8 +1,7 @@
 package com.cs.ganda.document;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,12 +10,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Getter
 @Setter
-@Document(value = "ADDRESS")
 public class Address {
-    @Id
     private String id;
     private int num;
     @NotBlank
+    @Indexed
     private String street;
     private int zip;
     private String city;

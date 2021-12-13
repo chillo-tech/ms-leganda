@@ -22,19 +22,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class ErrorControllerAdvice {
 
-    private static final Logger logger = LoggerFactory.getLogger(ErrorController.class);
     public static final String CREDENTIALS_INVALID = "Vos identifiants sont invalides ou votre compte n'est pas actif";
     public static final String DATA_INVALID = "Les données que vous avez saisi sont invalides";
-
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String internalServer(final Throwable throwable, final Model model) {
-        logger.error("Exception during execution of SpringSecurity application", throwable);
-        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
-        model.addAttribute("errorMessage", errorMessage);
-        return "500";
-    }
-
+    private static final Logger logger = LoggerFactory.getLogger(ErrorController.class);
 
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -44,8 +34,7 @@ public class ErrorControllerAdvice {
         model.addAttribute("errorMessage", errorMessage);
         return "error";
     }
-
-
+    
     @ExceptionHandler(ClassNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String pageNotFound(final Throwable throwable, final Model model) {

@@ -1,11 +1,11 @@
 package com.cs.ganda.controller;
 
+import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.Meal;
+import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.service.MealService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,10 +22,20 @@ public class MealController extends ApplicationController<Meal, String> {
         this.service = service;
     }
 
-    @GetMapping
+    @PostMapping(value = "/search")
     public @ResponseBody
-    List<Meal> search() {
-        return this.service.search();
+    List<Meal> search(
+            @RequestBody SearchParamsDTO searchParams,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return this.service.search(searchParams, page, size);
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping(path = "activate")
+    public void activate(@RequestBody ActivationData activationData) {
+        this.service.activate(activationData);
     }
 
 }

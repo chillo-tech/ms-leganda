@@ -13,11 +13,10 @@ spring:
      annonces-url: https://demenous.chillo.fr/demenagements
      paiement-url: https://demenous.chillo.fr/compte/paiement
 
-  sms:
-    twilo:
-      sid: ACe77e624544e47a28eed3a64b9f4a3034
-      token: 842d2953ed459f4dce1b137067236612
-      vaid: VA02c1d5c62479df1d650efd578513cb78
+resources:
+  images:
+    folder: "/images/applications/leganda/images"
+    host: "https://api.leganda.chillo.fr/images"
 
 provider:
   stripe:
