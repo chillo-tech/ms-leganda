@@ -24,6 +24,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -116,12 +117,17 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
 
     @Override
     public List<Meal> search(SearchParamsDTO searchParams, int page, int size) throws UsernameNotFoundException {
+
         Instant date = Instant.now();
         Query query = new Query(Criteria.where("validity.date").gte(date));
         query.addCriteria(Criteria.where("active").is(TRUE));
 
         if (searchParams.getDate() != null) {
             query.addCriteria(Criteria.where("validity.date").gte(searchParams.getDate()));
+        }
+
+        if (searchParams.getQuery() != null) {
+            query.addCriteria(TextCriteria.forDefaultLanguage().matching(searchParams.getQuery()));
         }
 
         if (searchParams.getCoordinates() != null) {

@@ -13,5 +13,6 @@ import java.time.Instant;
 @Setter
 public class SearchParamsDTO {
     private Instant date;
+    private String query;
     private double[] coordinates;
 }

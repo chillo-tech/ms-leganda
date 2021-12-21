@@ -43,8 +43,8 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
 
 
     @Override
-    public Set<Address> search(String query, boolean autocomplete) {
-        String response = this.mapBoxClient.search(query, accessToken);
+    public Set<Address> search(String query, String types, boolean autocomplete) {
+        String response = this.mapBoxClient.search(query, types, accessToken);
         JSONObject json = new JSONObject(response);
         JSONArray features = json.getJSONArray("features");
         return StreamSupport
