@@ -24,7 +24,6 @@ import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -123,11 +122,16 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
         query.addCriteria(Criteria.where("active").is(TRUE));
 
         if (searchParams.getDate() != null) {
-            query.addCriteria(Criteria.where("validity.date").gte(searchParams.getDate()));
+            Criteria criteria = new Criteria();
+            criteria.orOperator(
+                    Criteria.where("name").regex(searchParams.getQuery(), "i"),
+                    Criteria.where("description").regex(searchParams.getQuery(), "i")
+            );
+            query.addCriteria(criteria);
         }
 
         if (searchParams.getQuery() != null) {
-            query.addCriteria(TextCriteria.forDefaultLanguage().matching(searchParams.getQuery()));
+            query.addCriteria(Criteria.where("name").regex(searchParams.getQuery(), "i"));
         }
 
         if (searchParams.getCoordinates() != null) {
