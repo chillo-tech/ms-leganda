@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "mapboxClient", url = "${providers.mapbox.domain}")
 public interface MapBoxClient {
-    @GetMapping(value = "${providers.mapbox.places}/{query}.json?tlimit=5&reverseMode=score")
+    @GetMapping(value = "${providers.mapbox.places}/{query}.json?tlimit=5")
     String search(
             @PathVariable("query") String query,
             @RequestParam(defaultValue = "address") String types,

@@ -118,20 +118,16 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
     public List<Meal> search(SearchParamsDTO searchParams, int page, int size) throws UsernameNotFoundException {
 
         Instant date = Instant.now();
-        Query query = new Query(Criteria.where("validity.date").gte(date));
-        query.addCriteria(Criteria.where("active").is(TRUE));
+        Query query = new Query(Criteria.where("active").is(TRUE));
+        query.addCriteria(Criteria.where("validity.date").gte(date));
 
-        if (searchParams.getDate() != null) {
+        if (searchParams.getQuery() != null && !searchParams.getQuery().trim().isEmpty()) {
             Criteria criteria = new Criteria();
             criteria.orOperator(
                     Criteria.where("name").regex(searchParams.getQuery(), "i"),
                     Criteria.where("description").regex(searchParams.getQuery(), "i")
             );
             query.addCriteria(criteria);
-        }
-
-        if (searchParams.getQuery() != null) {
-            query.addCriteria(Criteria.where("name").regex(searchParams.getQuery(), "i"));
         }
 
         if (searchParams.getCoordinates() != null) {
