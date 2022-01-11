@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 
 import static com.cs.ganda.datas.Constant.MISSING_FIELD;
 import static com.cs.ganda.enums.Status.ACTIVE;
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -96,18 +97,19 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
         if (profile == null) {
             profile = meal.getProfile();
         }
-        profile.setActive(Boolean.FALSE);
-        meal.setActive(Boolean.FALSE);
+        profile.setActive(FALSE);
+        meal.setActive(TRUE);
         meal.setProfile(profile);
 
         meal.setCreation(Instant.now());
         Meal savedMeal = this.mealRepository.save(meal);
+        /*
         this.confirmationTokenService.sendAddActivationCode(
                 savedMeal.getId(),
                 meal.getProfile().getPhoneIndex(),
                 meal.getProfile().getPhone(),
                 savedMeal.getId()
-        );
+        );*/
         this.mailsService.newPublication(savedMeal);
         this.imageService.saveMealImages(meal);
         return savedMeal;
@@ -186,7 +188,7 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
     @Scheduled(cron = "@daily", zone = "Europe/Paris")
     public void deleteMealStatus() {
         log.info("Suppresion des articles à {}", Instant.now());
-        final List<String> ids = this.mealRepository.findAllByActive(Boolean.FALSE).map(Meal::getId).collect(Collectors.toList());
+        final List<String> ids = this.mealRepository.findAllByActive(FALSE).map(Meal::getId).collect(Collectors.toList());
         this.mealRepository.deleteAllById(ids);
     }
 }

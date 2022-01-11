@@ -152,6 +152,16 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.1.4</version>
+                <configuration>
+                    <to>
+                        <image>packages.chillo.fr/ms-leganda</image>
+                    </to>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -165,5 +175,15 @@
             </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 </project>
