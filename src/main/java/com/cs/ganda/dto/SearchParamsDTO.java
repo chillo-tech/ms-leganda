@@ -15,4 +15,7 @@ public class SearchParamsDTO {
     private Instant date;
     private String query;
     private double[] coordinates;
+
+    private String types = "address";
+    private String proximity;
 }

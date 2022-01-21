@@ -28,8 +28,10 @@ public class AddressController extends ApplicationController<Address, String> {
     Set<Address> search(
             @RequestParam String query,
             @RequestParam(defaultValue = "address") String types,
-            @RequestParam(defaultValue = "false") boolean autocomplete) {
-        return this.addressService.search(query, types, autocomplete);
+            @RequestParam(required = false) String proximity,
+            @RequestParam(defaultValue = "false") boolean autocomplete
+    ) {
+        return this.addressService.search(query, types, proximity, autocomplete);
     }
 
 

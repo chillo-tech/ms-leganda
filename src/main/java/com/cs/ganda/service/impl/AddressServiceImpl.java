@@ -6,14 +6,11 @@ import com.cs.ganda.document.Location;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.repository.AddressRepository;
 import com.cs.ganda.service.AddressService;
-import com.cs.ganda.service.CommonsMethods;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -22,31 +19,27 @@ import java.util.stream.StreamSupport;
 @Service
 public class AddressServiceImpl extends CRUDServiceImpl<Address, String> implements AddressService {
 
-    public static final String USER_NOT_FOUND = "Aucun profile ne correspond à %s";
-    private final AddressRepository addressRepository;
-    private final CommonsMethods commonsMethods;
     private final MapBoxClient mapBoxClient;
-
-    @Value("${providers.mapbox.access_token}")
-    private String accessToken;
 
     public AddressServiceImpl(
             AddressRepository addressRepository,
-            MapBoxClient mapBoxClient,
-            CommonsMethods commonsMethods
+            MapBoxClient mapBoxClient
     ) {
         super(addressRepository);
-        this.addressRepository = addressRepository;
-        this.commonsMethods = commonsMethods;
         this.mapBoxClient = mapBoxClient;
     }
 
-
     @Override
-    public Set<Address> search(String query, String types, boolean autocomplete) {
-        String response = this.mapBoxClient.search(query, types, accessToken);
+    public Set<Address> search(String query, String mapBoxtypes, String proximity, boolean autocomplete) {
+        SearchParamsDTO searchParams = new SearchParamsDTO();
+        searchParams.setTypes(mapBoxtypes);
+        if (proximity.isEmpty()) {
+            searchParams.setProximity(proximity);
+        }
+        String response = this.mapBoxClient.search(query, searchParams);
         JSONObject json = new JSONObject(response);
         JSONArray features = json.getJSONArray("features");
+
         return StreamSupport
                 .stream(features.spliterator(), true)
                 .map((item) -> {
@@ -71,8 +64,4 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
                 }).collect(Collectors.toSet());
     }
 
-    @Override
-    public List<Address> search(SearchParamsDTO searchParams) {
-        return null;
-    }
 }

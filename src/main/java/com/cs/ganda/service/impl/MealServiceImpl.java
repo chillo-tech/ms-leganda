@@ -103,13 +103,12 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
 
         meal.setCreation(Instant.now());
         Meal savedMeal = this.mealRepository.save(meal);
-        /*
         this.confirmationTokenService.sendAddActivationCode(
                 savedMeal.getId(),
                 meal.getProfile().getPhoneIndex(),
                 meal.getProfile().getPhone(),
                 savedMeal.getId()
-        );*/
+        );
         this.mailsService.newPublication(savedMeal);
         this.imageService.saveMealImages(meal);
         return savedMeal;
@@ -117,11 +116,11 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
 
 
     @Override
-    public List<Meal> search(SearchParamsDTO searchParams, int page, int size) throws UsernameNotFoundException {
-
+    public List<Meal> search(SearchParamsDTO searchParams, int page, int size) {
+        log.info("Recherche avec les critères {} {} {}", searchParams, page, size);
         Instant date = Instant.now();
         Query query = new Query(Criteria.where("active").is(TRUE));
-        query.addCriteria(Criteria.where("validity.date").gte(date));
+        query.addCriteria(Criteria.where("validity.start").gte(date));
 
         if (searchParams.getQuery() != null && !searchParams.getQuery().trim().isEmpty()) {
             Criteria criteria = new Criteria();
@@ -185,10 +184,12 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
      * <p>
      * Mis à jour du statut des articles actives
      */
+    /*
     @Scheduled(cron = "@daily", zone = "Europe/Paris")
     public void deleteMealStatus() {
-        log.info("Suppresion des articles à {}", Instant.now());
+        log.info("Suppression des articles à {}", Instant.now());
         final List<String> ids = this.mealRepository.findAllByActive(FALSE).map(Meal::getId).collect(Collectors.toList());
         this.mealRepository.deleteAllById(ids);
     }
+     */
 }

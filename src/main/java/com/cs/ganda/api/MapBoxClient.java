@@ -1,16 +1,20 @@
 package com.cs.ganda.api;
 
+import com.cs.ganda.dto.SearchParamsDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "mapboxClient", url = "${providers.mapbox.domain}")
 public interface MapBoxClient {
-    @GetMapping(value = "${providers.mapbox.places}/{query}.json?tlimit=5")
+    @GetMapping(value = "${providers.mapbox.places}/{query}.json" +
+            "?limit=5" +
+            "&access_token=${providers.mapbox.access_token}" +
+            "&country=${providers.mapbox.country}"
+    )
     String search(
             @PathVariable("query") String query,
-            @RequestParam(defaultValue = "address") String types,
-            @RequestParam(defaultValue = "${providers.mapbox.access_token}") String access_token
+            @SpringQueryMap SearchParamsDTO searchParams
     );
 }

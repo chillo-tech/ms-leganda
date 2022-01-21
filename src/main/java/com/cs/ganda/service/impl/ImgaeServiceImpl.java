@@ -41,11 +41,11 @@ public class ImgaeServiceImpl implements ImageService {
     public void saveMealImages(Meal meal) {
         List<Picture> pictures = meal.getPictures().stream().map(picture -> {
             try {
-                String localtion = System.getProperty("user.home") + "/" + imagesFolder + "/" + picture.getName() + ".jpg";
+                String location = System.getProperty("user.home") + "/" + imagesFolder + "/" + picture.getName() + ".jpg";
                 String path = this.imagesHost + "/" + picture.getName() + ".jpg";
                 picture.setUri(new URI(path));
                 byte[] decodedBytes = Base64.getDecoder().decode(picture.getBase64());
-                FileUtils.writeByteArrayToFile(new File(localtion), decodedBytes);
+                FileUtils.writeByteArrayToFile(new File(location), decodedBytes);
                 picture.setBase64(null);
                 return picture;
             } catch (IOException | URISyntaxException e) {
