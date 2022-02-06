@@ -1,7 +1,7 @@
 package com.cs.ganda.service;
 
-import com.cs.ganda.document.Meal;
+import com.cs.ganda.document.Ad;
 
 public interface ImageService {
-    void saveMealImages(Meal meal);
+    void saveAdImages(Ad ad);
 }

@@ -16,7 +16,7 @@ spring:
 resources:
   images:
     folder: "images/leganda"
-    host: "https://api.leganda.chillo.fr/images"
+    host: "https://api.leganda.chillo.fr/assets"
 
 provider:
   stripe:

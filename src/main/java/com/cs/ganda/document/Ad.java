@@ -19,8 +19,8 @@ import static java.lang.Boolean.FALSE;
 @NoArgsConstructor
 @Getter
 @Setter
-@Document(value = "MEAL")
-public class Meal {
+@Document(value = "AD")
+public class Ad {
     @Id
     private String id;
     @TextIndexed(weight = 2f)
@@ -36,6 +36,7 @@ public class Meal {
     private Instant creation;
     private Boolean active = FALSE;
 
+    private Category category;
     private Address address;
     private Profile profile;
     private Validity validity;

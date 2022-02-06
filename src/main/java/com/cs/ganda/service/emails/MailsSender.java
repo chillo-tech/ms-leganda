@@ -30,8 +30,6 @@ public class MailsSender {
         if (eParams.isHtml()) {
             try {
                 sendHtmlMail(eParams);
-                eParams.setTo(Collections.singletonList(eParams.getFrom()));
-                sendHtmlMail(eParams);
             } catch (MessagingException e) {
                 log.error("Could not send email to : {} Error = {}", eParams.getToAsList(), e.getMessage());
             }

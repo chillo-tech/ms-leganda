@@ -1,10 +1,13 @@
 package com.cs.ganda.service.impl;
 
+import com.cs.ganda.document.Profile;
 import com.cs.ganda.service.CRUDService;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Objects;
 
@@ -22,8 +25,7 @@ public abstract class CRUDServiceImpl<T, ID> implements CRUDService<T, ID> {
 
     @Override
     public T create(T t) {
-        this.repo.save(t);
-        return null;
+        return this.repo.save(t);
     }
 
     @Override
@@ -65,4 +67,9 @@ public abstract class CRUDServiceImpl<T, ID> implements CRUDService<T, ID> {
         log.debug("updated enitity: {}", updated);
     }
 
+    @Override
+    public Profile getAuthenticatedProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (Profile) authentication.getPrincipal();
+    }
 }

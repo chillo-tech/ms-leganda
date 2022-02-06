@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequestMapping()
-public class MealException {
+public class AdException {
 
 
 }

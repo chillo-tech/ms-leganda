@@ -1,8 +1,8 @@
 package com.cs.ganda.service.impl;
 
-import com.cs.ganda.document.Meal;
+import com.cs.ganda.document.Ad;
 import com.cs.ganda.document.Picture;
-import com.cs.ganda.repository.MealRepository;
+import com.cs.ganda.repository.AdRepository;
 import com.cs.ganda.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -24,22 +24,22 @@ public class ImgaeServiceImpl implements ImageService {
 
     private final String imagesFolder;
     private final String imagesHost;
-    private final MealRepository mealRepository;
+    private final AdRepository adRepository;
 
     public ImgaeServiceImpl(
-            MealRepository mealRepository,
+            AdRepository adRepository,
             @Value("${resources.images.folder}") String imagesFolder,
             @Value("${resources.images.host}") String imagesHost
     ) {
-        this.mealRepository = mealRepository;
+        this.adRepository = adRepository;
         this.imagesHost = imagesHost;
         this.imagesFolder = imagesFolder;
     }
 
     @Async
     @Override
-    public void saveMealImages(Meal meal) {
-        List<Picture> pictures = meal.getPictures().stream().map(picture -> {
+    public void saveAdImages(Ad ad) {
+        List<Picture> pictures = ad.getPictures().stream().map(picture -> {
             try {
                 String location = System.getProperty("user.home") + "/" + imagesFolder + "/" + picture.getName() + ".jpg";
                 String path = this.imagesHost + "/" + picture.getName() + ".jpg";
@@ -53,7 +53,7 @@ public class ImgaeServiceImpl implements ImageService {
             }
             return null;
         }).collect(Collectors.toList());
-        meal.setPictures(pictures);
-        this.mealRepository.save(meal);
+        ad.setPictures(pictures);
+        this.adRepository.save(ad);
     }
 }

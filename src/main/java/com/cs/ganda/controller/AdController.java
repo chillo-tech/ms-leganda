@@ -1,30 +1,36 @@
 package com.cs.ganda.controller;
 
 import com.cs.ganda.document.ActivationData;
-import com.cs.ganda.document.Meal;
+import com.cs.ganda.document.Ad;
 import com.cs.ganda.dto.SearchParamsDTO;
-import com.cs.ganda.service.MealService;
+import com.cs.ganda.service.AdService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "v1/meal", produces = APPLICATION_JSON_VALUE)
-public class MealController extends ApplicationController<Meal, String> {
+@RequestMapping(path = "v1/ad", produces = APPLICATION_JSON_VALUE)
+public class AdController extends ApplicationController<Ad, String> {
 
-    private final MealService service;
+    private final AdService service;
 
-    public MealController(MealService service) {
+    public AdController(AdService service) {
         super(service);
         this.service = service;
     }
 
     @PostMapping(value = "/search")
     public @ResponseBody
-    List<Meal> search(
+    List<Ad> search(
             @RequestBody SearchParamsDTO searchParams,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size

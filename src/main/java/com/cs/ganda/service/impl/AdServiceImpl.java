@@ -1,18 +1,15 @@
 package com.cs.ganda.service.impl;
 
 import com.cs.ganda.document.ActivationData;
-import com.cs.ganda.document.ConfirmationToken;
-import com.cs.ganda.document.Meal;
+import com.cs.ganda.document.Ad;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.enums.Status;
-import com.cs.ganda.repository.MealRepository;
-import com.cs.ganda.repository.ProfileRepository;
+import com.cs.ganda.repository.AdRepository;
+import com.cs.ganda.service.AdService;
 import com.cs.ganda.service.CommonsMethods;
 import com.cs.ganda.service.ImageService;
-import com.cs.ganda.service.MealService;
 import com.cs.ganda.service.emails.MailsService;
-import com.cs.ganda.service.sms.ConfirmationTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,78 +42,51 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Slf4j
 @Service
-public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements MealService {
-    private final MealRepository mealRepository;
-    private final ProfileRepository profileRepository;
+public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdService {
+    private final AdRepository adRepository;
     private final MailsService mailsService;
     private final CommonsMethods commonsMethods;
     private final MongoTemplate mongoTemplate;
-    private final ConfirmationTokenService confirmationTokenService;
     private final ImageService imageService;
 
-    public MealServiceImpl(
-            ProfileRepository profileRepository,
-            MealRepository mealRepository,
+    public AdServiceImpl(
+            AdRepository adRepository,
             MailsService mailsService,
             ImageService imageService,
-            ConfirmationTokenService confirmationTokenService,
             CommonsMethods commonsMethods,
             MongoTemplate mongoTemplate
     ) {
-        super(mealRepository);
+        super(adRepository);
         this.imageService = imageService;
         this.mailsService = mailsService;
-        this.confirmationTokenService = confirmationTokenService;
-        this.mealRepository = mealRepository;
-        this.profileRepository = profileRepository;
+        this.adRepository = adRepository;
         this.commonsMethods = commonsMethods;
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
     public void activate(ActivationData activationData) {
-        ConfirmationToken confirmationToken = this.confirmationTokenService.activate(
-                activationData.getItemId(),
-                activationData.getPhone(),
-                activationData.getPhoneIndex(),
-                activationData.getToken()
-        );
-        Meal meal = this.read(confirmationToken.getAdId());
-
-        Update update = new Update().set("active", TRUE);
-        this.mongoTemplate.update(Meal.class).matching(where("id").is(meal.getId()))
-                .apply(update).first();
     }
 
     @Override
-    public Meal create(Meal meal) throws UsernameNotFoundException {
-        Objects.requireNonNull(meal.getName(), String.format(MISSING_FIELD, "Nom"));
+    public Ad create(Ad ad) throws UsernameNotFoundException {
+        Objects.requireNonNull(ad.getName(), String.format(MISSING_FIELD, "Nom"));
 
-        Profile profile = meal.getProfile();
-        profile = this.profileRepository.findByPhone(profile.getPhone());
-        if (profile == null) {
-            profile = meal.getProfile();
-        }
-        profile.setActive(FALSE);
-        meal.setActive(TRUE);
-        meal.setProfile(profile);
+        Profile profile = this.getAuthenticatedProfile();
+        ad.setActive(TRUE);
+        ad.setProfile(profile);
 
-        meal.setCreation(Instant.now());
-        Meal savedMeal = this.mealRepository.save(meal);
-        this.confirmationTokenService.sendAddActivationCode(
-                savedMeal.getId(),
-                meal.getProfile().getPhoneIndex(),
-                meal.getProfile().getPhone(),
-                savedMeal.getId()
-        );
-        this.mailsService.newPublication(savedMeal);
-        this.imageService.saveMealImages(meal);
-        return savedMeal;
+        ad.setCreation(Instant.now());
+        Ad savedAd = this.adRepository.save(ad);
+
+        this.mailsService.newPublication(savedAd);
+        this.imageService.saveAdImages(ad);
+        return savedAd;
     }
 
 
     @Override
-    public List<Meal> search(SearchParamsDTO searchParams, int page, int size) {
+    public List<Ad> search(SearchParamsDTO searchParams, int page, int size) {
         log.info("Recherche avec les critères {} {} {}", searchParams, page, size);
         Instant date = Instant.now();
         Query query = new Query(Criteria.where("active").is(TRUE));
@@ -145,21 +115,22 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
 
         Pageable pageRequest = PageRequest.of(page, size, Sort.by(ASC, "validity.start"));
         query.with(pageRequest);
-        return this.mongoTemplate.find(query, Meal.class);
+        return this.mongoTemplate.find(query, Ad.class);
     }
 
     @Override
-    public Meal read(String id) {
-        Meal meal = this.mealRepository.findById(id)
+    public Ad read(String id) {
+        Ad ad = this.adRepository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Aucune entite ne correspond à l'id " + id));
-        updateViews(meal.getId());
-        return meal;
+        updateViews(ad.getId());
+        return ad;
     }
+
 
     private void updateViews(String id) {
         Query query = new Query(where("id").is(id));
         Update update = new Update().inc("views", 1);
-        this.mongoTemplate.updateFirst(query, update, Meal.class);
+        this.mongoTemplate.updateFirst(query, update, Ad.class);
     }
 
     /**
@@ -168,15 +139,15 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
      * Mis à jour du statut des articles actives
      */
     @Scheduled(cron = "@daily", zone = "Europe/Paris")
-    public void updateMealStatus() {
+    public void updateAdStatus() {
         log.info("Mis à jour des articles à {}", Instant.now());
-        final Stream<Meal> meals = this.mealRepository.findAllByStatusInOrderByCreation(Set.of(ACTIVE));
-        final Set<Meal> mealsAsSet = meals.peek(meal -> {
-            final Status status = this.commonsMethods.getStatusFromDates(meal.getValidity(), meal.getValidity());
-            meal.setStatus(status);
+        final Stream<Ad> ads = this.adRepository.findAllByStatusInOrderByCreation(Set.of(ACTIVE));
+        final Set<Ad> adsAsSet = ads.peek(ad -> {
+            final Status status = this.commonsMethods.getStatusFromDates(ad.getValidity(), ad.getValidity());
+            ad.setStatus(status);
         }).collect(Collectors.toSet());
 
-        this.mealRepository.saveAll(mealsAsSet);
+        this.adRepository.saveAll(adsAsSet);
     }
 
     /**
@@ -184,12 +155,10 @@ public class MealServiceImpl extends CRUDServiceImpl<Meal, String> implements Me
      * <p>
      * Mis à jour du statut des articles actives
      */
-    /*
     @Scheduled(cron = "@daily", zone = "Europe/Paris")
-    public void deleteMealStatus() {
+    public void deleteAdStatus() {
         log.info("Suppression des articles à {}", Instant.now());
-        final List<String> ids = this.mealRepository.findAllByActive(FALSE).map(Meal::getId).collect(Collectors.toList());
-        this.mealRepository.deleteAllById(ids);
+        final List<String> ids = this.adRepository.findAllByActive(FALSE).map(Ad::getId).collect(Collectors.toList());
+        this.adRepository.deleteAllById(ids);
     }
-     */
 }

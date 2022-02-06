@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <title>Responsive & Flat - Un kit pour newsletters gratuit et libre</title>
-    <style type="text/css" media="screen">
+    <style media="screen" type="text/css">
 
         .ExternalClass * {
             line-height: 100%
@@ -17,6 +17,7 @@
             }
 
             table[class=resp-full-table] {
+                width: 100% !important;
                 width: 100% !important;
                 clear: both;
             }
@@ -42,18 +43,19 @@
 
     <!-- Début en-tête -->
 
-    <table id="email-penrose-conteneur" width="660" align="center" style="padding:20px 0px;" border="0" cellspacing="0"
-           cellpadding="0">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" id="email-penrose-conteneur"
+           style="padding:20px 0px;"
+           width="660">
         <tr>
             <td>
-                <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" class="resp-full-table" width="660">
                     <tr>
-                        <td width="50%" style="text-align:left;">
+                        <td style="text-align:left;" width="50%">
                             <a href="#"
                                style="vfont-weight: bold !important; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color: #2A3F54 !important; text-decoration: none;">DEMENOUS</a>
                         </td>
-                        <td width="50%" style="text-align:right;">
-                            <table align="right" border="0" cellspacing="0" cellpadding="0">
+                        <td style="text-align:right;" width="50%">
+                            <table align="right" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="padding-left:10px;">
                                         <a href="#"
@@ -78,9 +80,11 @@
 
     <!-- Fin en-tête -->
 
-    <table id="email-penrose-conteneur" width="660" align="center"
+    <table align="center" border="0" cellpadding="0"
+           cellspacing="0"
+           id="email-penrose-conteneur"
            style="border-right:1px solid #e2e8ea; border-bottom:1px solid #e2e8ea; border-left:1px solid #e2e8ea; background-color:#2A3F54;"
-           border="0" cellspacing="0" cellpadding="0">
+           width="660">
 
         <!-- Début bloc "mise en avant" -->
 
@@ -89,26 +93,28 @@
 
         <tr>
             <td style="border-bottom: 1px solid #e2e8ea">
-                <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0"
-                       style="padding:20px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" class="resp-full-table"
+                       style="padding:20px;"
+                       width="660">
                     <tr>
                         <td width="100%">
 
-                            <table class="resp-full-table"
-                                   style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                                   border="0" cellspacing="0" cellpadding="0">
+                            <table border="0"
+                                   cellpadding="0"
+                                   cellspacing="0" class="resp-full-table"
+                                   style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
                                 <tr>
-                                    <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
+                                    <td class="resp-full-td" style="text-align : justify;" valign="top" width="100%">
                                         <span style="font-size:16px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#f4f4f4">Bonjour
-                                             <span th:text="${prenomDestinataire}" style="text-transform: capitalize">jean</span>&nbsp;
-                                            <span th:text="${nomDestinataire}" style="text-transform: uppercase"></span>,
+                                             <span style="text-transform: capitalize" th:text="${prenomDestinataire}">jean</span>&nbsp;
+                                            <span style="text-transform: uppercase" th:text="${nomDestinataire}"></span>,
                                         </span>
                                         <br/><br/>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
+                                    <td class="resp-full-td" style="text-align : justify;" valign="top" width="100%">
                                         <span style="font-size:16px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color: #f4f4f4">
                                                Vous venez de faire une demande d'inscription sur notre site.
                                         </span><br/>
@@ -118,12 +124,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
+                                    <td class="resp-full-td" style="text-align : justify;" valign="top" width="100%">
                                         <br/>
                                         <h5 style="font-family: HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;line-height:1.1;color:#000;font-weight:900;font-size:17px;margin:0 0 15px;padding:0">
-                                            <a th:href="@{${lienUrl}}"
-                                               style="font-family:Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif;color:#17a2b8;margin:0;padding:0"
+                                            <a style="font-family:Helvetica Neue,Helvetica,Helvetica,Arial,sans-serif;color:#17a2b8;margin:0;padding:0"
                                                target="_blank"
+                                               th:href="@{${lienUrl}}"
                                                th:text="${lienTexte}">
                                                 Cliquez ici pour voir
                                             </a>
@@ -131,16 +137,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
+                                    <td class="resp-full-td" style="text-align : justify;" valign="top" width="100%">
                                         <span style="font-size:16px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#f4f4f4">Nous vous remercions pour votre confiance,</span>
                                         <br/>
                                         <span style="font-size:16px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#f4f4f4">Cordialement,</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
+                                    <td class="resp-full-td" style="text-align : justify;" valign="top" width="100%">
                                         <span style="font-size:16px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#f4f4f4">
-                                            L' équipe <span style="color: #ffffff">demenous</span>
+                                            L' équipe de <span style="color: #ffffff">LEGANDA</span>
                                         </span>
                                         <br/><br/>
                                     </td>
@@ -160,13 +166,14 @@
 
     <!-- Début footer -->
 
-    <table id="email-penrose-conteneur" width="600" align="center" style="padding:20px 0px;" border="0" cellspacing="0"
-           cellpadding="0">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" id="email-penrose-conteneur"
+           style="padding:20px 0px;"
+           width="600">
         <tr>
             <td>
-                <table width="600" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" class="resp-full-table" width="600">
                     <tr>
-                        <td width="100%" class="resp-full-td" style="text-align: center;">
+                        <td class="resp-full-td" style="text-align: center;" width="100%">
                             <span style="font-size:12px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#aeb2b3; padding-top: 50px">
                             Cet email vous a été transmis par le site  demenous.com.
                             </span>

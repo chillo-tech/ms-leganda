@@ -29,9 +29,10 @@ spring:
       token: fe7b0d004cc05005832438a6b6c3efbf
       vaid: VA600e34ba66f214ed2f209b61584e310e
 jwt:
-  header: "TOKEN_PAYLOAD"
+  accessToken: "accessToken"
+  refreshToken: "refreshToken"
   infos: "USER_INFOS"
-  secret: "AL_KEY"
+  secret: "TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
   expiration: 3600 # (secondes) == 1 heure
   route:
     authentication:

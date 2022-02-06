@@ -1,5 +1,7 @@
 package com.cs.ganda.service;
 
+import com.cs.ganda.document.Profile;
+
 public interface CRUDService<T, ID> {
 
     T create(T t);
@@ -9,4 +11,6 @@ public interface CRUDService<T, ID> {
     void delete(ID id);
 
     void update(T t, ID id);
+
+    Profile getAuthenticatedProfile();
 }

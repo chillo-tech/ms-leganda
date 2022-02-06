@@ -3,12 +3,16 @@ package com.cs.ganda.service.impl;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.repository.ProfileRepository;
 import com.cs.ganda.service.ProfileService;
-import com.cs.ganda.service.sms.ConfirmationTokenService;
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+
+import static com.cs.ganda.enums.UserRole.USER;
 import static java.lang.Boolean.FALSE;
 
 @AllArgsConstructor
@@ -17,13 +21,28 @@ public class ProfileServiceImpl implements ProfileService {
 
     public static final String USER_NOT_FOUND = "Aucun profile ne correspond à %s";
     private final ProfileRepository profileRepository;
-    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     public void register(Profile profile) {
         profile.setActive(FALSE);
-        this.confirmationTokenService.sendActivationCode(profile);
+        profile.setFullPhone(profile.getPhoneIndex() + profile.getPhone());
+        profile.setRoles(Sets.newHashSet(USER));
         this.profileRepository.save(profile);
+    }
+
+    @Override
+    public Profile update(Profile profile) {
+        profile.setRoles(Sets.newHashSet(USER));
+        profile.setFullPhone(profile.getPhoneIndex() + profile.getPhone());
+        Profile currentProfile = this.findByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
+        try {
+            BeanUtils.copyProperties(currentProfile, profile);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return this.profileRepository.save(currentProfile);
     }
 
     @Override
@@ -32,18 +51,17 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     public Profile findByPhoneAndPhoneIndex(String phone, String phoneIndex) {
-        return this.profileRepository.findTopByPhoneAndPhoneIndex(phone, phoneIndex).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, phone)));
+        return this.profileRepository.findByPhoneAndPhoneIndex(phone, phoneIndex).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, phone)));
     }
 
+    @Override
     public Profile findById(String id) {
         return this.profileRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, "identifiant transmis")));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String[] parts = username.split("_");
-        return null; //this.profileRepository.findTopByPhoneAndPhoneIndex(parts[1], parts[0]).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, parts[1])));
+        return this.profileRepository.findByFullPhone(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, username)));
     }
-
 
 }
