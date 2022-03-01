@@ -1,3 +1,7 @@
+account:
+  activation:
+    send: true
+    code: ""
 server:
   port: 9090
   servlet:

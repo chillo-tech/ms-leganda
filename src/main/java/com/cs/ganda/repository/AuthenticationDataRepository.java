@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AuthenticationDataRepository extends MongoRepository<AuthenticationData, String> {
     Optional<AuthenticationData> findByAccessToken(String token);
+
+    Optional<AuthenticationData> findByRefreshToken(String token);
 }

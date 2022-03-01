@@ -34,7 +34,6 @@ public class SmsService {
                 .setSendDigits(activationCode)
                 .create();
         log.info("[Activation code] status {}", verification.getStatus());
-
     }
 
     public VerificationCheck validate(String index, String number, String token) {

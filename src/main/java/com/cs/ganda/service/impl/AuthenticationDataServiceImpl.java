@@ -22,4 +22,10 @@ public class AuthenticationDataServiceImpl extends CRUDServiceImpl<Authenticatio
     public AuthenticationData findByAccessToken(String token) {
         return this.authenticationDataRepository.findByAccessToken(token).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, "identifiant transmis")));
     }
+
+    @Override
+    public AuthenticationData findByRefreshoken(String token) {
+        return this.authenticationDataRepository.findByRefreshToken(token).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, "identifiant transmis")));
+
+    }
 }

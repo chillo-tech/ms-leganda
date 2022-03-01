@@ -53,8 +53,18 @@ public class AccountServiceImpl implements AccountService {
     private final AuthenticationDataService authenticationDataService;
     private final CommonsMethods commonsMethods;
     private final MongoTemplate mongoTemplate;
+
     @Value("${jwt.accessToken}")
     private String accessToken;
+
+    @Value("${jwt.refreshToken}")
+    private String refreshToken;
+
+    @Value("${account.activation.send}")
+    private Boolean sendAccountActivationCode;
+
+    @Value("${account.activation.code}")
+    private String accountActivationCode;
 
     public void resetPassword(PasswordData passwordData) {
         Objects.requireNonNull(passwordData.getPassword(), String.format(MISSING_FIELD, "mot de passe"));
@@ -143,8 +153,9 @@ public class AccountServiceImpl implements AccountService {
         if (optionalProfile.isEmpty()) {
             throw new IllegalArgumentException(String.format(ACCOUNT_NOT_EXISTS, "l'email", email));
         }
-
-        this.confirmationTokenService.sendActivationCode(optionalProfile.get());
+        if (sendAccountActivationCode) {
+            this.confirmationTokenService.sendActivationCode(optionalProfile.get());
+        }
     }
 
     @Override
@@ -161,7 +172,10 @@ public class AccountServiceImpl implements AccountService {
             currentProfile.setPhone(activationData.getPhone());
         }
         this.profileService.register(currentProfile);
-        this.confirmationTokenService.sendActivationCode(activationData);
+        if (sendAccountActivationCode) {
+            this.confirmationTokenService.sendActivationCode(activationData);
+
+        }
     }
 
     @Override
@@ -179,7 +193,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AuthenticationData refreshToken(Map<String, String> data) {
-        AuthenticationData authenticationData = this.authenticationDataService.findByAccessToken(data.get(accessToken));
+        AuthenticationData authenticationData = this.authenticationDataService.findByRefreshoken(data.get(refreshToken));
         Profile profile = this.profileService.findById(authenticationData.getUserId());
         return this.getAuthenticationData(profile);
     }
@@ -188,7 +202,12 @@ public class AccountServiceImpl implements AccountService {
     public AuthenticationData activatePhone(ActivationData activationData) {
         AuthenticationData authenticationData = new AuthenticationData();
         Profile profile = this.profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
-        String activationStatus = this.confirmationTokenService.activatePhone(activationData);
+        String activationStatus = null;
+        if (sendAccountActivationCode) {
+            activationStatus = this.confirmationTokenService.activatePhone(activationData);
+        } else if (activationData.getToken().equals(accountActivationCode)) {
+            activationStatus = "approved";
+        }
         if (!activationStatus.equals("approved")) {
             throw new IllegalArgumentException(CODE_INVALID);
         }

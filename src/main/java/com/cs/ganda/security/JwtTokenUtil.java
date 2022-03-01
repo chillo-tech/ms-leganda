@@ -120,7 +120,7 @@ public class JwtTokenUtil {
     private Date calculateExpirationDate(Date createdDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(createdDate);
-        calendar.add(Calendar.HOUR, 6);
+        calendar.add(Calendar.SECOND, 10);
         return calendar.getTime();
     }
 }
