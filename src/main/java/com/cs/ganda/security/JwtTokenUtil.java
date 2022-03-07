@@ -19,7 +19,6 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    private static final long serialVersionUID = -3301605591108950415L;
     private final Clock clock = DefaultClock.INSTANCE;
 
     @Value("${jwt.secret}")
@@ -46,6 +45,7 @@ public class JwtTokenUtil {
     }
 
     private Claims getAllClaimsFromToken(String token) {
+
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
@@ -120,7 +120,7 @@ public class JwtTokenUtil {
     private Date calculateExpirationDate(Date createdDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(createdDate);
-        calendar.add(Calendar.SECOND, 10);
+        calendar.add(Calendar.HOUR, 120);
         return calendar.getTime();
     }
 }

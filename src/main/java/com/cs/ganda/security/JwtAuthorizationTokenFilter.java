@@ -47,15 +47,18 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         Cookie cookie = this.getCookie(request, this.tokenHeader);
         String username = null;
         String authToken = null;
-        if (cookie != null) {
-            authToken = cookie.getValue();
+        logger.debug("processing authentication for '{}'", request.getRequestURL());
+
+        final String requestHeader = request.getHeader(this.tokenHeader);
+        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
+            authToken = requestHeader.substring(7);
             try {
                 AuthenticationData authenticationData = this.authenticationDataService.findByAccessToken(authToken);
                 username = jwtTokenUtil.getUsernameFromToken(authenticationData.getAccessToken());
             } catch (IllegalArgumentException e) {
                 logger.error("an error occured during getting username from token", e);
             } catch (ExpiredJwtException e) {
-                logger.error("the token is expired and not valid anymore", e);
+                logger.warn("the token is expired and not valid anymore", e);
             }
         } else {
             logger.warn("couldn't find bearer string, will ignore the header");

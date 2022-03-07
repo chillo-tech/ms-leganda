@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationDataService authenticationDataService;
 
     public WebSecurityConfig(
-            @Value("${jwt.accessToken}") String tokenHeader,
+            @Value("${jwt.header}") String tokenHeader,
             JwtTokenUtil jwtTokenUtil,
             ProfileService profileService,
             JwtAuthenticationEntryPoint unauthorizedHandler,
