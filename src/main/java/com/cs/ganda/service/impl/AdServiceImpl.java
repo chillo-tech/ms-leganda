@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -71,7 +72,19 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
     @Override
     public Ad create(Ad ad) throws UsernameNotFoundException {
         Objects.requireNonNull(ad.getName(), String.format(MISSING_FIELD, "Nom"));
+        Instant currentStart = ad.getValidity().getStart();
+        int hour = currentStart.atZone(ZoneOffset.UTC).getHour();
+        int minute = currentStart.atZone(ZoneOffset.UTC).getMinute();
+        int second = currentStart.atZone(ZoneOffset.UTC).getSecond();
 
+        Instant newStart = ad.getValidity().getDate();
+        newStart.atZone(ZoneOffset.UTC)
+                .withHour(hour)
+                .withMinute(minute)
+                .withSecond(second)
+                .toInstant();
+        ad.getValidity().setStart(newStart);
+        
         Profile profile = this.getAuthenticatedProfile();
         ad.setActive(TRUE);
         ad.setProfile(profile);
@@ -116,6 +129,14 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         Pageable pageRequest = PageRequest.of(page, size, Sort.by(ASC, "validity.start"));
         query.with(pageRequest);
         return this.mongoTemplate.find(query, Ad.class);
+    }
+
+    @Override
+    public List<Ad> findAllByProfileIdIn(List<String> ids) {
+        return this.adRepository
+                .findAllByProfileIdIn(ids)
+                .filter(ad -> ad.getValidity().getStart().isAfter(Instant.now()))
+                .collect(Collectors.toList());
     }
 
     @Override

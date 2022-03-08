@@ -10,4 +10,6 @@ public interface AdService extends CRUDService<Ad, String> {
     void activate(ActivationData activationData);
 
     List<Ad> search(SearchParamsDTO searchParams, int page, int size);
+
+    List<Ad> findAllByProfileIdIn(List<String> ids);
 }

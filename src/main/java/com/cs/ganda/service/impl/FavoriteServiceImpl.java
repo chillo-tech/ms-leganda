@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,8 +49,14 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Set<String> search() {
+    public Set<String> getFavoritesProvidersId() {
         Profile profile = this.authenticationDataService.getAuthenticatedProfile();
         return this.favoriteRepository.findByProfileId(profile.getId()).map(favorite -> favorite.getProvider().getId()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<Ad> getFavoritesAds() {
+        List<String> providerIds = new ArrayList<>(this.getFavoritesProvidersId());
+        return this.adService.findAllByProfileIdIn(providerIds);
     }
 }

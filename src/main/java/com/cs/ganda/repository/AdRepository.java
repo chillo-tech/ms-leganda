@@ -5,6 +5,7 @@ import com.cs.ganda.enums.Status;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -13,6 +14,8 @@ public interface AdRepository extends MongoRepository<Ad, String> {
     Stream<Ad> findAllByStatusInOrderByCreation(Set<Status> status);
 
     Stream<Ad> findAllByActive(Boolean status);
+
+    Stream<Ad> findAllByProfileIdIn(List<String> id);
 
     Stream<Ad> findByValidityDateAfter(Instant date);
 

@@ -1,4 +1,4 @@
-package com.cs.ganda;
+package com.cs.ganda.controller;
 
 import com.cs.ganda.enums.Action;
 import com.cs.ganda.service.FavoriteService;
@@ -34,7 +34,7 @@ public class FavoriteController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Set<String> search() {
-        return this.service.search();
+        return this.service.getFavoritesProvidersId();
     }
 
 }

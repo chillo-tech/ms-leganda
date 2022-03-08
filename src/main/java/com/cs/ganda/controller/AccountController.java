@@ -1,11 +1,13 @@
 package com.cs.ganda.controller;
 
 import com.cs.ganda.document.ActivationData;
+import com.cs.ganda.document.Ad;
 import com.cs.ganda.document.AuthenticationData;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.AuthenticationRequest;
 import com.cs.ganda.dto.PasswordData;
 import com.cs.ganda.service.AccountService;
+import com.cs.ganda.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,6 +42,7 @@ public class AccountController {
     public static final String CREDENTIALS_INVALID = "Vos identifiants sont invalide ou votre compte n'est pas actif";
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
+    private final FavoriteService favoriteService;
     @Value("${jwt.accessToken}")
     private String accessToken;
     @Value("${jwt.refreshToken}")
@@ -113,6 +117,12 @@ public class AccountController {
     @PostMapping(path = "new-password", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void inscription(@RequestBody @Valid PasswordData passwordData) {
         this.accountService.resetPassword(passwordData);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(path = "favorites")
+    public List<Ad> getFavoritesAds() {
+        return this.favoriteService.getFavoritesAds();
     }
 
     private void authenticate(String username, String password) {
