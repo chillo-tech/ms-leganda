@@ -3,7 +3,6 @@ spring:
     mongodb:
       #username: rapplications
       #password: rapplications
-      database: db-leganda
       host: db-mongo
       authentication-database: admin
   mail:

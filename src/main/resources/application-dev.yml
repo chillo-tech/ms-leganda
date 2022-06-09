@@ -15,8 +15,7 @@ spring:
   data:
     mongodb:
       #username: rmongo
-      #password: rambao
-      database: db-leganda
+      #password: ramba
       host: localhost
       port: 27017
       authentication-database: admin
