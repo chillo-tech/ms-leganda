@@ -25,8 +25,8 @@ jobs:
         password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
         key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
         script: |
-          sudo mkdir -p /opt/applications/zeeven/ms-zeeven
-          sudo chmod ugo+rwx /opt/applications/zeeven/ms-zeeven
+          sudo mkdir -p /opt/applications/leganda/ms-leganda
+          sudo chmod ugo+rwx /opt/applications/leganda/ms-leganda
 
 
   copy-configs:
@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
           key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
           source: "docker-compose.yml"
-          target: "/opt/applications/zeeven/ms-zeeven"
+          target: "/opt/applications/leganda/ms-leganda"
 
   dockerize:
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: simachille/ms-zeeven
+          images: simachille/ms-leganda
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
@@ -106,7 +106,7 @@ jobs:
         password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
         key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
         script: |
-          docker-compose -f /opt/applications/zeeven/ms-zeeven/docker-compose.yml stop
-          docker-compose -f /opt/applications/zeeven/ms-zeeven/docker-compose.yml rm -f
-          docker rmi simachille/ms-zeeven -f
-          docker-compose -f /opt/applications/zeeven/ms-zeeven/docker-compose.yml up -d
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
+          docker rmi simachille/ms-leganda -f
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d
