@@ -16,7 +16,7 @@ spring:
   spring:
     data:
       mongodb:
-        database: zeeven
+        database: leganda
         auto-index-creation: true
   devtools:
     livereload:
