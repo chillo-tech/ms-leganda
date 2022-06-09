@@ -16,6 +16,7 @@ spring:
   spring:
     data:
       mongodb:
+        database: zeeven
         auto-index-creation: true
   devtools:
     livereload:

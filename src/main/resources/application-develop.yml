@@ -1,17 +1,16 @@
-app:
+server:
   host: http://api.leganda.chillo.fr
 spring:
   data:
     mongodb:
       host: db-mongo
-      database: zeeven
   mail:
-      host: ${app.host}
-      accountLink: ${app.host}/activer-mon-compte?code=
-      activation-url:  ${app.host}/activate
-      new-password-url:  ${app.host}/nouveau-mot-de-passe
-      annonces-url:  ${app.host}/demenagements
-      paiement-url:  ${app.host}/compte/paiement
+      host: ${server.host}
+      accountLink: ${server.host}/activer-mon-compte?code=
+      activation-url:  ${server.host}/activate
+      new-password-url:  ${server.host}/nouveau-mot-de-passe
+      annonces-url:  ${server.host}/demenagements
+      paiement-url:  ${server.host}/compte/paiement
 
 
 
