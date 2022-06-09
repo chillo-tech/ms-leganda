@@ -8,8 +8,8 @@ server:
     context-path: /api
   session.tracking-modes: 'cookie'
 mongock:
-  change-logs-scan-package:
-  - com.ams.ambao.config.db.changelog
+  migration-scan-package:
+  - com.cs.ganda.config.db.changelog
 spring:
   application:
     name: ms-leganda

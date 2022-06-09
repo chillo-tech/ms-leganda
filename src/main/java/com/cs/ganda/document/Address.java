@@ -1,6 +1,10 @@
 package com.cs.ganda.document;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.validation.constraints.NotBlank;
@@ -20,5 +24,5 @@ public class Address {
     private String city;
     private String description;
     @NotBlank
-    private Location coordinates;
+    private Location location;
 }

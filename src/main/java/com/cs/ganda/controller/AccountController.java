@@ -2,6 +2,7 @@ package com.cs.ganda.controller;
 
 import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.Ad;
+import com.cs.ganda.document.Address;
 import com.cs.ganda.document.AuthenticationData;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.AuthenticationRequest;
@@ -105,6 +106,12 @@ public class AccountController {
         response.addCookie(getCookie(accessToken, authenticationData.getAccessToken()));
         response.addCookie(getCookie(refreshToken, authenticationData.getRefreshToken()));
         return authenticationData;
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping(path = "add-address", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void location(@RequestBody @Valid Address address) {
+        this.accountService.updateAddress(address);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

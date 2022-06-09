@@ -84,7 +84,7 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
                 .withSecond(second)
                 .toInstant();
         ad.getValidity().setStart(newStart);
-        
+
         Profile profile = this.getAuthenticatedProfile();
         ad.setActive(TRUE);
         ad.setProfile(profile);
@@ -116,7 +116,7 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
 
         if (searchParams.getCoordinates() != null) {
             query.addCriteria(
-                    Criteria.where("address.coordinates.coordinates")
+                    Criteria.where("address.location.coordinates")
                             .withinSphere(
                                     new Circle(
                                             new Point(searchParams.getCoordinates()[0], searchParams.getCoordinates()[1]),

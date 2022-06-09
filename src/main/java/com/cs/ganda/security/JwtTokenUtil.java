@@ -71,6 +71,7 @@ public class JwtTokenUtil {
         claims.put("roles", profile.getRoles());
         claims.put("prenom", profile.getLastName());
         claims.put("nom", profile.getFirstName());
+        claims.put("adresse", profile.getAddress());
         return doGenerateToken(claims, profile.getPhoneIndex() + profile.getPhone());
     }
 

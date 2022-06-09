@@ -1,7 +1,9 @@
 package com.cs.ganda.service.impl;
 
+import com.cs.ganda.document.Address;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.repository.ProfileRepository;
+import com.cs.ganda.service.AuthenticationDataService;
 import com.cs.ganda.service.ProfileService;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     public static final String USER_NOT_FOUND = "Aucun profile ne correspond à %s";
     private final ProfileRepository profileRepository;
+    private final AuthenticationDataService authenticationDataService;
 
     @Override
     public void register(Profile profile) {
@@ -62,6 +65,13 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.profileRepository.findByFullPhone(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, username)));
+    }
+
+    @Override
+    public void updateAddress(Address address) {
+        Profile profile = this.authenticationDataService.getAuthenticatedProfile();
+        profile.setAddress(address);
+        this.profileRepository.save(profile);
     }
 
 }

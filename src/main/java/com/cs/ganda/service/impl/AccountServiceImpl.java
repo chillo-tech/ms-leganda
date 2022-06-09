@@ -1,6 +1,7 @@
 package com.cs.ganda.service.impl;
 
 import com.cs.ganda.document.ActivationData;
+import com.cs.ganda.document.Address;
 import com.cs.ganda.document.AuthenticationData;
 import com.cs.ganda.document.ConfirmationToken;
 import com.cs.ganda.document.Profile;
@@ -196,6 +197,11 @@ public class AccountServiceImpl implements AccountService {
         AuthenticationData authenticationData = this.authenticationDataService.findByRefreshoken(data.get(refreshToken));
         Profile profile = this.profileService.findById(authenticationData.getUserId());
         return this.getAuthenticationData(profile);
+    }
+
+    @Override
+    public void updateAddress(Address address) {
+        this.profileService.updateAddress(address);
     }
 
     @Override

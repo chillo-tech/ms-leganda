@@ -1,6 +1,7 @@
 package com.cs.ganda.service;
 
 import com.cs.ganda.document.ActivationData;
+import com.cs.ganda.document.Address;
 import com.cs.ganda.document.AuthenticationData;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.AuthenticationRequest;
@@ -26,4 +27,6 @@ public interface AccountService {
     AuthenticationData updateProfile(Profile profile);
 
     AuthenticationData refreshToken(Map<String, String> data);
+
+    void updateAddress(Address address);
 }

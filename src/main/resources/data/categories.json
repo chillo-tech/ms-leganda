@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Repas",
+    "Description": "Des plats faits maison"
+  },
+  {
+    "name": "Boisson",
+    "Description": "Liste des boissons à disposition"
+  }
+]

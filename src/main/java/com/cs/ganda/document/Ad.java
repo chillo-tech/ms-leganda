@@ -36,7 +36,7 @@ public class Ad {
     private Instant creation;
     private Boolean active = FALSE;
 
-    private Category category;
+    private CategoryTemplate category;
     private Address address;
     private Profile profile;
     private Validity validity;

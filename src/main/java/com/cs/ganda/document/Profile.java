@@ -50,6 +50,7 @@ public class Profile implements UserDetails {
     private String fullPhone;
     private boolean active;
     private boolean phoneActive;
+    private Address address;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -59,7 +59,7 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
                     double longitude = coordinates.getDouble(1);
                     double[] latLong = {latitude, longitude};
 
-                    address.setCoordinates(new Location(type, latLong));
+                    address.setLocation(new Location(type, latLong));
                     return address;
                 }).collect(Collectors.toSet());
     }
