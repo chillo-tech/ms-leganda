@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +42,11 @@ public class CategoryChangelog {
     public void changeSet() throws IOException {
         Resource resource = new ClassPathResource("data/categories.json");
 
-        Reader reader = Files.newBufferedReader(resource.getFile().toPath());
         Type listType = new TypeToken<ArrayList<Category>>() {
         }.getType();
-        List<Category> categoryList = new Gson().fromJson(reader, listType);
+        byte[] bdata = FileCopyUtils.copyToByteArray(resource.getInputStream());
+        String data = new String(bdata, StandardCharsets.UTF_8);
+        List<Category> categoryList = new Gson().fromJson(data, listType);
 
         categoryList.stream().forEach(category -> mongoTemplate.save(category));
     }
