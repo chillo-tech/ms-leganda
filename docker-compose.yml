@@ -9,7 +9,7 @@ services:
     networks:
       - applications-network
     environment:
-      - "SPRING_PROFILES_ACTIVE=develop"
+      - "SPRING_PROFILES_ACTIVE=recette"
 
     labels:
       - "traefik.enable=true"
