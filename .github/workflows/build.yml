@@ -108,5 +108,5 @@ jobs:
         script: |
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
-          docker rmi simachille/ms-leganda -f
+          docker rmi simachille/ms-leganda:develop -f
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d
