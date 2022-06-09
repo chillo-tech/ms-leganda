@@ -13,7 +13,7 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ms-zeeven.rule=Headers(`X-Host`, `api.leganda.chillo.fr`)"
+      - "traefik.http.routers.ms-leganda.rule=Headers(`X-Host`, `api.leganda.chillo.fr`)"
       - "traefik.docker.network=applications-network"
 
 networks:
