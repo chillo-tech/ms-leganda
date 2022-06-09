@@ -3,7 +3,7 @@ services:
   ms-app:
     container_name: ms-leganda
     restart: always
-    image: '$REGISTRY/ms-leganda:develop'
+    image: 'simachille/ms-leganda:develop'
     ports:
       - "27190:9090"
     networks:
