@@ -31,7 +31,7 @@ spring:
   sms:
     twilo:
       sid: AC98a9ee8ba8c2152e166abcc1faeed551
-      token: 9eb65f0c21a14e35046ef939c23a64c1
+      token: 3b7473fce2862b150689fc76897f5901
       vaid: VA13dc906e7310bcb64f3a521a469aedf3
 jwt:
   header: "Authorization"
