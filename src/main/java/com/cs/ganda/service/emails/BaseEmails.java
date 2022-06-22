@@ -24,7 +24,7 @@ public class BaseEmails {
     private static final String TITRE = "titre";
     private static final String MESSAGE = "message";
     private static final String EMAIL_DESTINATAIRE = "email";
-
+    private  Profile profile;
     private final EMailContentBuilder eMailContentBuilder;
     private final String annoncesUrl;
     private final String activationUrl;
@@ -49,7 +49,9 @@ public class BaseEmails {
         replacements.put(MESSAGE, "Une annonce vient d'être créée");
         replacements.put(PRENOM_DESTINATAIRE, ad.getProfile().getFirstName());
         replacements.put(NOM_DESTINATAIRE, ad.getProfile().getLastName());
-        replacements.put(EMAIL_DESTINATAIRE, from);
+        //avant c'était from qui était appelé alors que from fait référence à contact@leganda.fr
+        // il fallait tout simplement changer from par le mail de celui qui fait le post
+        replacements.put(EMAIL_DESTINATAIRE, ad.getProfile().getEmail());
         replacements.put(LIEN_URL, String.format("%s/%s", annoncesUrl, ad.getId()));
         replacements.put(LIEN_TEXTE, NEW_PUBLICATION_LINK);
 

@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@ChangeUnit(id = "category-initializer", order = "2", author = "achille", runAlways = true)
+@ChangeUnit(id = "category-initializer", order = "2", author = "achille")
 public class CategoryChangelog {
 
     private final MongoTemplate mongoTemplate;

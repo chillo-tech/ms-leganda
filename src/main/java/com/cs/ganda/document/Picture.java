@@ -12,7 +12,8 @@ import java.net.URI;
 @Setter
 public class Picture {
     private String name;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) était la  raison pour laquelle les images ne s'affichait pas
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private String base64;
     private URI uri;
     private int width;

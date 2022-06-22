@@ -1,7 +1,9 @@
+
 account:
   activation:
-    send: true
-    code: ""
+    send: false
+    code: "101010"
+
 server:
   port: 9090
   servlet:
@@ -16,17 +18,36 @@ spring:
   spring:
     data:
       mongodb:
+        host: localhost
+        port: 27017
         database: leganda
-        auto-index-creation: true
   devtools:
     livereload:
       enabled: true
   thymeleaf:
     cache: false
   mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bonjour.zeeven@gmail.com
+    password: iglzycxeyxccljzo
     default-encoding: UTF-8
     protocol: smtp
     test-connection: false
+    activation-url: http://localhost:9090/activate
+    new-password-url: http://localhost:9090/nouveau-mot-de-passe
+    annonces-url: http://localhost:9090/demenagements
+    paiement-url: http://localhost:9090/compte/paiement
+    properties:
+      mail:
+        smtp:
+          auth: false
+          ssl:
+            trust: "*"
+          starttls:
+            enable: true
+
+
 
   sms:
     twilo:
@@ -59,3 +80,7 @@ logging:
     ROOT: INFO
     com.cs.ganda.: INFO
 feign.client.config.default.loggerLevel: full
+resources:
+  images:
+    folder: "/images/applications/leganda/images"
+    host: "http://localhost:27191/images"

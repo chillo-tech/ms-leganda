@@ -46,7 +46,7 @@ public class ImgaeServiceImpl implements ImageService {
                 picture.setUri(new URI(path));
                 byte[] decodedBytes = Base64.getDecoder().decode(picture.getBase64());
                 FileUtils.writeByteArrayToFile(new File(location), decodedBytes);
-                picture.setBase64(null);
+                picture.setBase64(picture.getBase64());
                 return picture;
             } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
