@@ -109,7 +109,8 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
             Criteria criteria = new Criteria();
             criteria.orOperator(
                     Criteria.where("name").regex(searchParams.getQuery(), "i"),
-                    Criteria.where("description").regex(searchParams.getQuery(), "i")
+                    Criteria.where("description").regex(searchParams.getQuery(), "i"),
+                    Criteria.where("category.name").regex(searchParams.getQuery(),"i")
             );
             query.addCriteria(criteria);
         }

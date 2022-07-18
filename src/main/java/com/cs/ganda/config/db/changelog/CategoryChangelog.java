@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@ChangeUnit(id = "category-initializer", order = "2", author = "achille")
+@ChangeUnit(id = "category-initializer", order = "3", author = "achille")// runAlways je dois l'enlever après
 public class CategoryChangelog {
 
     private final MongoTemplate mongoTemplate;

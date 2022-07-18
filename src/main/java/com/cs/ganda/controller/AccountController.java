@@ -101,7 +101,8 @@ public class AccountController {
     @PostMapping(path = "signin", consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     AuthenticationData connexion(@RequestBody @Valid AuthenticationRequest authenticationRequest, HttpServletResponse response) {
-        authenticate(authenticationRequest.getPhoneIndex() + "_" + authenticationRequest.getPhone(), authenticationRequest.getPassword());
+
+        authenticate(authenticationRequest.getPhoneIndex()  + authenticationRequest.getPhone(), authenticationRequest.getPassword());
         AuthenticationData authenticationData = this.accountService.login(authenticationRequest);
         response.addCookie(getCookie(accessToken, authenticationData.getAccessToken()));
         response.addCookie(getCookie(refreshToken, authenticationData.getRefreshToken()));
@@ -133,11 +134,14 @@ public class AccountController {
     }
 
     private void authenticate(String username, String password) {
-        Objects.requireNonNull(password, String.format(MISSING_FIELD, "mode de passe"));
+
+        Objects.requireNonNull(password, String.format(MISSING_FIELD, "mot de passe"));
         Objects.requireNonNull(username, String.format(MISSING_FIELD, "téléphone"));
-        try {
+        try {  System.out.println("authent");
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            System.out.println("authent2");
         } catch (DisabledException | BadCredentialsException e) {
+            System.out.println("authent3");
             throw new IllegalArgumentException(CREDENTIALS_INVALID);
         }
     }

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.TextScore;
 
+import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class Ad {
     private Instant creation;
     private Boolean active = FALSE;
 
-    private CategoryTemplate category;
+    private Category category ;
     private Address address;
     private Profile profile;
     private Validity validity;

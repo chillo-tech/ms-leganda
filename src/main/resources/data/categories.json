@@ -6,5 +6,9 @@
   {
     "name": "Boisson",
     "Description": "Liste des boissons à disposition"
+  },
+  {
+    "name": "Autres",
+    "Description": "Colis de trop"
   }
 ]

@@ -116,10 +116,11 @@ public class AccountServiceImpl implements AccountService {
     public AuthenticationData login(AuthenticationRequest authenticationRequest) {
         String usermame = authenticationRequest.getPhone();
         String password = authenticationRequest.getPassword();
-        Objects.requireNonNull(password, String.format(MISSING_FIELD, "mode de passe"));
+        Objects.requireNonNull(password, String.format(MISSING_FIELD, "mot de passe"));
         Objects.requireNonNull(usermame, String.format(MISSING_FIELD, "mail"));
 
         Optional<Profile> optionalProfile = profilRepository.findByPhoneAndPhoneIndex(authenticationRequest.getPhone(), authenticationRequest.getPhoneIndex());
+        System.out.println(optionalProfile.isEmpty());
         if (optionalProfile.isEmpty()) {
             throw new IllegalArgumentException(String.format(ACCOUNT_NOT_EXISTS, "l'email", usermame));
         }
