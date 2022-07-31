@@ -1,14 +1,17 @@
 [
   {
     "name": "Repas",
-    "Description": "Des plats faits maison"
+    "description": "Des plats faits maison",
+    "icon": "https://cdn-icons.flaticon.com/png/512/2046/premium/2046670.png?token=exp=1659308095~hmac=762710667c790d7a5bfbc462a7aed9a2"
   },
   {
     "name": "Boisson",
-    "Description": "Liste des boissons à disposition"
+    "description": "Liste des boissons à disposition",
+    "icon": "https://cdn-icons-png.flaticon.com/512/2405/2405597.png"
   },
   {
     "name": "Autres",
-    "Description": "Colis de trop"
+    "description": "Colis de trop",
+    "icon": "https://cdn-icons.flaticon.com/png/512/4710/premium/4710369.png?token=exp=1659308186~hmac=a2a35a6da07452884a887d13dbcc8491"
   }
 ]
