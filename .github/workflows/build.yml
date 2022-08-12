@@ -68,6 +68,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           #ce que j'ai ajouter
+      - name: Nexus release
+        uses: Propromp/nexus-release@1
+        with:
+          server: "nexus.chillo.fr"
+          groupId: "cs.com."
+          #nexusUsername: ${{ secrets.NEXUS_USERNAME }}
+         # nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
 
       - name: Build with Maven
         run: mvn -Dmaven.test.skip=true clean compile package
@@ -76,10 +83,11 @@ jobs:
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
           serverUrl: http://nexus.chillo.fr
-          username: ${{ secrets.username }}
-          password: ${{ secrets.password }}
+          #username: ${{ secrets.username }}
+         # password: ${{ secrets.password }}
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
-          
+          assets: extension=jar
+          filename: ./target/app-1.0.0.jar
 
       - name: check
         run: |
