@@ -69,10 +69,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: Build with Maven
+        run: mvn -Dmaven.test.skip=true clean compile package
 
       - name: check
         run: |
           ls -al
+          ls -al target
 
 
       #ce que j'ai ajouter
@@ -83,9 +86,6 @@ jobs:
           #groupId: "cs.com"
           #nexusUsername: admin
           #nexusPassword: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
-
-      - name: Build with Maven
-        run: mvn -Dmaven.test.skip=true clean compile package
         #ce que j'ai ajouter
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
