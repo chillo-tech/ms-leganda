@@ -1,8 +1,8 @@
 on:
   push:
     branches:
-      - develop
-      -
+      #- develop
+      - miseEnLigne
   workflow_dispatch:
 
 env:
