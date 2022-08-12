@@ -73,7 +73,7 @@ jobs:
       - name: check
         run: |
           ls -al
-          ls -al target
+          
 
       #ce que j'ai ajouter
       - name: Nexus release
