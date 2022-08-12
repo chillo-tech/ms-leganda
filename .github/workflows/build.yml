@@ -72,8 +72,8 @@ jobs:
       - name: Nexus release
         uses: Propromp/nexus-release@1
         with:
-          server: "nexus.chillo.fr"
-          #groupId: "com.example"
+          server: "nexus"
+          groupId: "cs.com."
           nexusUsername: ${{ secrets.NEXUS_USERNAME }}
           nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
 
@@ -86,8 +86,6 @@ jobs:
           serverUrl: http://nexus.chillo.fr
           username: ${{ secrets.username }}
           password: ${{ secrets.password }}
-          format: spring
-          repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
           filename: ./target/app-1.0.0.jar
