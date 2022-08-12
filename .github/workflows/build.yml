@@ -101,9 +101,7 @@ jobs:
           context: .
           load: true
           tags: myimage:latest
-      - name: Inspecter
-        run: |
-          docker image inspect myimage:latest
+      
 
 
       
