@@ -69,14 +69,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           #ce que j'ai ajouter
-      - name: Nexus release
-        uses: Propromp/nexus-release@1
-        with:
-          server: "nexus"
-          groupId: "cs.com."
-          nexusUsername: ${{ secrets.NEXUS_USERNAME }}
-          nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
-
+    
       - name: Build with Maven
         run: mvn -Dmaven.test.skip=true clean compile package
         #ce que j'ai ajouter
