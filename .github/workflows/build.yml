@@ -83,9 +83,9 @@ jobs:
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
-          serverUrl: http://nexus.chillo.fr
-          username: "admin"
-          #password: ${{ secrets.password }}
+          serverUrl: "http://nexus.chillo.fr"
+          username: admin
+          password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
           filename: ./target/app-1.0.0.jar
