@@ -67,11 +67,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+          #ce que j'ai ajouter
       - name: Nexus release
         uses: Propromp/nexus-release@1
         with:
           server: "nexus.chillo.fr"
-          groupId: "com.example"
+          #groupId: "com.example"
           nexusUsername: ${{ secrets.NEXUS_USERNAME }}
           nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
 
