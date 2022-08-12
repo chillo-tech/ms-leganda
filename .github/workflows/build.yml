@@ -77,7 +77,7 @@ jobs:
           ls -al target
 
         #ce que j'ai ajouter
-        
+
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
@@ -85,7 +85,7 @@ jobs:
           username: admin
           password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
           format: maven2
-          repository: maven-releases
+          repository: maven-snapshot
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
           filename: ./target/ms-leganda-0.0.1-SNAPSHOT.jar
