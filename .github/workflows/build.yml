@@ -97,7 +97,7 @@ jobs:
           repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
-          filename: ./ms-leganda-0.0.1.jar
+          filename: ./target/ms-leganda-0.0.1-SNAPSHOT.jar
 
 
       
