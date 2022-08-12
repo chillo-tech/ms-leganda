@@ -69,7 +69,7 @@ jobs:
           distribution: 'adopt'
           #ce que j'ai ajouter
       #- name: Nexus release
-       " uses: Propromp/nexus-release@1
+       # uses: Propromp/nexus-release@1
        # with:
           server: "nexus.chillo.fr"
          # groupId: "cs.com."
