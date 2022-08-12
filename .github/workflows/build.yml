@@ -83,7 +83,7 @@ jobs:
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
           serverUrl: http://nexus.chillo.fr
-          username: admin
+          username: "admin"
           #password: ${{ secrets.password }}
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
