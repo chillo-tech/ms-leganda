@@ -95,6 +95,14 @@ jobs:
           assets: extension=jar
           filename: ./target/ms-leganda-0.0.1.jar
 
+      -name: Nexus image docker
+       uses: TUDOCK/action-composer-nexus-upload@v1
+       if: ${{ github.event_name == 'push' }}
+       with:
+         repository: https://nexus.chillo.fr
+         username: admin
+         password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
+
 
       
      # - name: Extract metadata (tags, labels) for Docker
