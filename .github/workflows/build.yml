@@ -72,8 +72,8 @@ jobs:
       - name: Nexus release
         uses: Propromp/nexus-release@1
         with:
-          server: https://nexus.chillo.fr
-          groupId: cs.com.
+          server: "nexus.chillo.fr"
+          groupId: cs.com
           nexusUsername: admin
           nexusPassword: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
 
