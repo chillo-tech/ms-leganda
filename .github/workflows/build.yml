@@ -75,6 +75,7 @@ jobs:
         run: |
           ls -al
           ls -al target
+          
         #ce que j'ai ajouter
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
