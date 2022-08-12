@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - miseEnLigne
+      - develop
   workflow_dispatch:
 
 env:
@@ -11,7 +11,6 @@ permissions:
   contents: read
 
 jobs:
-
 
   create-folder:
     name: Create folder
@@ -109,5 +108,5 @@ jobs:
         script: |
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
-          docker rmi simachille/ms-leganda:miseEnLigne -f
+          docker rmi simachille/ms-leganda:develop -f
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d
