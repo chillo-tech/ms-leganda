@@ -72,7 +72,7 @@ jobs:
       #- name: Nexus release
        # uses: Propromp/nexus-release@1
        # with:
-          server: "nexus.chillo.fr"
+         # server: "nexus.chillo.fr"
          # groupId: "cs.com."
           #nexusUsername: ${{ secrets.NEXUS_USERNAME }}
          # nexusPassword: ${{ secrets.NEXUS_PASSWORD }}
