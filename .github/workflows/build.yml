@@ -85,7 +85,7 @@ jobs:
           serverUrl: http://nexus.chillo.fr
           username: ${{ secrets.username }}
           password: ${{ secrets.password }}
-          format: maven2
+          format: spring
           repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1-SNAPSHOT
           assets: extension=jar
