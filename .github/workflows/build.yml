@@ -97,6 +97,7 @@ jobs:
 
       -name: Nexus image docker
        uses: TUDOCK/action-composer-nexus-upload@v1
+       if: ${{ dev-miseEnLigne == 'push' }}
        with:
          repository: https://nexus.chillo.fr
          username: admin
