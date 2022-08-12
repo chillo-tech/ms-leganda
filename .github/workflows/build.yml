@@ -96,6 +96,8 @@ jobs:
           assets: extension=jar
           filename: ./target/ms-leganda-0.0.1.jar
 
+
+
       - name: Buils and push docker image
         uses: docker/build-push-action@v3
         with:
