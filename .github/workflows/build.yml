@@ -79,6 +79,7 @@ jobs:
           ls -al target
 
       - name: Nexus Repo Publish
+        if: steps.check.outputs.triggered == 'true'
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
           serverUrl: https://nexus.chillo.fr
