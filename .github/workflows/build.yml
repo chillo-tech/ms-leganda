@@ -78,18 +78,17 @@ jobs:
           mv ./target/ms-leganda-0.0.1-SNAPSHOT.jar ./target/ms-leganda-0.0.1.jar
           ls -al target
 
-      - name: Nexus Repo Publish
-        if: steps.check.outputs.triggered == 'true'
-        uses: sonatype-nexus-community/nexus-repo-github-action@master
-        with:
-          serverUrl: https://nexus.chillo.fr
-          username: admin
-          password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
-          format: maven2
-          repository: maven-releases
-          coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
-          assets: extension=jar
-          filename: ./target/ms-leganda-0.0.1.jar
+      # - name: Nexus Repo Publish
+      #   uses: sonatype-nexus-community/nexus-repo-github-action@master
+      #   with:
+      #     serverUrl: https://nexus.chillo.fr
+      #     username: admin
+      #     password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
+      #     format: maven2
+      #     repository: maven-releases
+      #     coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
+      #     assets: extension=jar
+      #     filename: ./target/ms-leganda-0.0.1.jar
 
 
 
