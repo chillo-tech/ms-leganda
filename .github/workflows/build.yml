@@ -90,14 +90,13 @@ jobs:
       #     assets: extension=jar
       #     filename: ./target/ms-leganda-0.0.1.jar
 
-
-
-      - name: Buils and push docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: myimage:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   run-container:
     name: "Run container"
