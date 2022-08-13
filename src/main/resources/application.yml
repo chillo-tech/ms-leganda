@@ -46,13 +46,10 @@ spring:
             trust: "*"
           starttls:
             enable: true
-
-
-
   sms:
     twilo:
       sid: ACcbb01f55e3469ff5eea683ebc1aac50f
-      token: 1778b79bac3e35612ed996f5cb2531f4
+      token: e9af1368a0e58e3f423f755073a1ee90
       vaid: VAe62952bb863b850e20fb3caa82451131
 jwt:
   header: "Authorization"

@@ -47,7 +47,7 @@ public class CategoryChangelog {
         byte[] bdata = FileCopyUtils.copyToByteArray(resource.getInputStream());
         String data = new String(bdata, StandardCharsets.UTF_8);
         List<Category> categoryList = new Gson().fromJson(data, listType);
-
+        mongoTemplate.dropCollection("CATEGORY");
         categoryList.stream().forEach(category -> mongoTemplate.save(category));
     }
 

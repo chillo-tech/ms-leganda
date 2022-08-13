@@ -26,6 +26,7 @@ public class SmsService {
 
     @Async
     public void send(String index, String number, String activationCode) {
+        log.info("ACCOUNT_SID {} AUTH_TOKEN {} VA_ID {}", ACCOUNT_SID, AUTH_TOKEN, VA_ID);
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         Verification verification = Verification.creator(
                         VA_ID,

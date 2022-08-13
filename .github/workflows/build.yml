@@ -35,8 +35,7 @@ jobs:
     needs: create-folder
     steps:
       - uses: actions/checkout@master
-      - 
-        name: copy file via ssh password
+      - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.RECETTE_APPLICATIONS_HOST }}
