@@ -89,7 +89,11 @@ jobs:
       #     coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
       #     assets: extension=jar
       #     filename: ./target/ms-leganda-0.0.1.jar
-
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: simachille/ms-leganda
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
