@@ -107,21 +107,21 @@ jobs:
         with:
           context: .
           tags: simachille:latest
-          outputs: type=docker,dest=/ms-leganda/simachille.tar
+          outputs: type=docker,dest=/tmp/simachille.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: simachille
-          path: /ms-leganda/simachille.tar
+          path: /tmp/simachille.tar
 
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: simachille
-          path: /ms-leganda
+          path: /tmp
       - name: Load image
         run: |
-           docker load --input /ms-leganda/simachille.tar
+           docker load --input /tmp/simachille.tar
            docker image ls -a
 
 
