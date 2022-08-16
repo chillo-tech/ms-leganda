@@ -117,7 +117,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: Mon image
+          name: simachille
           path: /tmp
       - name: Load image
         run: |
