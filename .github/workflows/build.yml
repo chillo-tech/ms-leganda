@@ -106,7 +106,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: myimage:latest
+          tags: simachille/ms-leganda:latest
           outputs: type=docker,dest=/tmp/simachille/ms-leganda.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
