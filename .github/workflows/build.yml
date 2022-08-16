@@ -91,6 +91,7 @@ jobs:
       #     filename: ./target/ms-leganda-0.0.1.jar
       - name: Extract metadata (tags, labels) for Docker
         id: meta
+        
         uses: docker/metadata-action@v3
         with:
           images: simachille/ms-leganda
