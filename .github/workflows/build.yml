@@ -119,7 +119,6 @@ jobs:
         with:
           name: myimage
           path: /tmp
-          
       - name: Load image
         run: |
            docker load --input /tmp/myimage.tar
