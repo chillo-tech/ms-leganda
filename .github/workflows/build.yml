@@ -130,7 +130,7 @@ jobs:
 
         run: |
            docker load --input /tmp/simachille.tar
-           docker image ls -a
+           docker images ls -a
 
 
 
