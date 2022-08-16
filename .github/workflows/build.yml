@@ -115,7 +115,7 @@ jobs:
           path: /tmp/simachille.tar
 
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/upload-artifact@v1
         with:
           name: simachille
           path: /tmp
