@@ -94,7 +94,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: simachille/ms-leganda
+          images: ms-leganda
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -108,18 +108,18 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: simachille/ms-leganda:latest
+          tags: ms-leganda:latest
           outputs: type=docker,dest=/tmp/ms-leganda.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: simachille/ms-leganda
+          name: ms-leganda
           path: /tmp/ms-leganda.tar
 
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: simachille/ms-leganda
+          name: ms-leganda
           path: /tmp
 
   use:
@@ -131,7 +131,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: "simachille/ms-leganda:lastest"
+          name: ms-leganda
           path: /tmp
       - name: Load image
         run: |
