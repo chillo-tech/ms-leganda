@@ -94,7 +94,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: simachille/ms-leganda
+          images: ms-leganda
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -108,18 +108,18 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: simachille/ms-leganda:latest
-          outputs: type=docker,dest=/tmp/simachille/ms-leganda.tar
+          tags: ms-leganda:latest
+          outputs: type=docker,dest=/tmp/ms-leganda.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: simachille/ms-leganda
-          path: /tmp/simachille/ms-leganda.tar
+          name: ms-leganda
+          path: /tmp/ms-leganda.tar
 
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: simachille/ms-leganda
+          name: ms-leganda
           path: /tmp
 
   use:
@@ -131,11 +131,11 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: simachille/ms-leganda
+          name: ms-leganda
           path: /tmp
       - name: Load image
         run: |
-          docker load --input /tmp/simachille/ms-leganda.tar
+          docker load --input /tmp/ms-leganda.tar
           docker image ls -a
 
 
@@ -155,5 +155,5 @@ jobs:
         script: |
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
-          docker rmi simachille/ms-leganda:develop -f
+          docker rmi ms-leganda:develop -f
           docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d
