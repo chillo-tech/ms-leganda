@@ -108,37 +108,41 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: simachille:latest
-          outputs: type=docker,dest=/tmp/simachille.tar
+          tags: simachille/ms-leganda:latest
+          outputs: type=docker,dest=/tmp/simachille/ms-leganda.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: simachille
-          path: /tmp/simachille.tar
+          name: simachille/ms-leganda
+          path: /tmp/simachille/ms-leganda.tar
 
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: simachille
+          name: simachille/ms-leganda
+          path: /tmp
+
+  use:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: simachille/ms-leganda
           path: /tmp
       - name: Load image
-        uses: sonatype-nexus-community/nexus-repo-github-action@master
-        with:
-          serverUrl: https://nexus.chillo.fr
-          username: admin
-          password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
-          format: docker
-          repository: docker
-       run: |
-        docker load --input /tmp/simachille.tar
-        docker image ls -a
-
+        run: |
+          docker load --input /tmp/simachille/ms-leganda.tar
+          docker image ls -a
 
 
   run-container:
     name: "Run container"
     runs-on: ubuntu-latest
-    needs: [dockerize, copy-configs]
+    needs: [dockerize, copy-configs,use]
     steps:
     - name: Run container
       uses: appleboy/ssh-action@master
