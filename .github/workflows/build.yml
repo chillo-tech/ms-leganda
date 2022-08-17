@@ -127,10 +127,11 @@ jobs:
           serverUrl: https://nexus.chillo.fr
           username: admin
           password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
-          
-        run: |
-           docker load --input /tmp/simachille.tar
-           docker image ls -a
+          format: docker
+          repository: docker
+      run: |
+        docker load --input /tmp/simachille.tar
+        docker image ls -a
 
 
 
