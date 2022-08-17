@@ -131,7 +131,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: simachille/ms-leganda
+          name: simachille/ms-leganda:lastest
           path: /tmp
       - name: Load image
         run: |
