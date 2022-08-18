@@ -94,7 +94,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ms-leganda
+          images: simachille
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -108,18 +108,18 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: ms-leganda:latest
-          outputs: type=docker,dest=/tmp/ms-leganda.tar
+          tags: simachille:latest
+          outputs: type=docker,dest=/tmp/simachille.tar
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ms-leganda
-          path: /tmp/ms-leganda.tar
+          name: simachille
+          path: /tmp/simachille.tar
 
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ms-leganda
+          name: simachille
           path: /tmp
 
   use:
@@ -131,11 +131,11 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ms-leganda
+          name: simachille
           path: /tmp
       - name: Load image
         run: |
-          docker load --input /tmp/ms-leganda.tar
+          docker load --input /tmp/simachille.tar
           docker image ls -a
 
 
@@ -153,7 +153,7 @@ jobs:
         password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
         key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
         script: |
-          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
-          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
-          docker rmi simachille/ms-leganda:develop -f
-          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d
+          docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml stop
+          docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml rm -f
+          docker rmi simachille/simachille:develop -f
+          docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml up -d
