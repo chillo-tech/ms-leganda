@@ -129,6 +129,7 @@ jobs:
 
       - name: tag image
         run: docker tag ms-leganda:${{ github.ref_name }}-${{ github.sha }} https://nexus.chillo.fr/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
+        
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
 
