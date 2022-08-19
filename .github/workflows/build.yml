@@ -123,10 +123,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
-          push: true
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.sha }}
+            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}:${{ github.sha }}
 
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}:${{ github.sha }}
