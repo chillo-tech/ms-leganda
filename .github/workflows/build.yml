@@ -2,7 +2,7 @@ on:
   push:
     branches:
       #- develop
-      - miseEnLigne
+      - deploiement
   workflow_dispatch:
 
 env:
@@ -96,7 +96,6 @@ jobs:
       #    repository: maven-releases
        #   coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha }}
        #   assets: extension=jar
-       #   filename: ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
 
   dockerise-and-push-to-nexus:
     name: "dockerise-and-push-to-nexus"
@@ -124,9 +123,8 @@ jobs:
         with:
           context: .
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}:/simachille/ms-leganda
-            ${{ secrets.NEXUS_HOSTNAME }}:${{ github.ref_name }}
-            ${{ secrets.NEXUS_HOSTNAME }}:${{ github.sha }}
+            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
+
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
 
