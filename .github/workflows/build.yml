@@ -86,17 +86,17 @@ jobs:
         run: |
           ls -al
 
-      - name: Nexus Repo Publish
-        uses: sonatype-nexus-community/nexus-repo-github-action@master
-        with:
-          serverUrl: ${{ secrets.NEXUS_HOSTNAME }}
-          username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSWORD }}
-          format: maven2
-          repository: maven-releases
-          coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha }}
-          assets: extension=jar
-          filename: ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
+    #  - name: Nexus Repo Publish
+    #    uses: sonatype-nexus-community/nexus-repo-github-action@master
+    #    with:
+     #     serverUrl: ${{ secrets.NEXUS_HOSTNAME }}
+     #     username: ${{ secrets.NEXUS_USERNAME }}
+      #    password: ${{ secrets.NEXUS_PASSWORD }}
+      #    format: maven2
+      #    repository: maven-releases
+       #   coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha }}
+       #   assets: extension=jar
+       #   filename: ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
 
   dockerise-and-push-to-nexus:
     name: "dockerise-and-push-to-nexus"
@@ -124,8 +124,10 @@ jobs:
         with:
           context: .
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
-
+            ${{ secrets.NEXUS_HOSTNAME }}:latest
+            ${{ secrets.NEXUS_HOSTNAME }}:/simachille/ms-leganda
+            ${{ secrets.NEXUS_HOSTNAME }}:${{ github.ref_name }}
+            ${{ secrets.NEXUS_HOSTNAME }}:${{ github.sha }}
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
 
