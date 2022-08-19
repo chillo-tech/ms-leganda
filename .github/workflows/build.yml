@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: params
-      run: echo ${{ github.head_ref }}.${{ github.sha }}
+      run: echo ${{ github.head_ref }} ${{ github.sha }}
     - name: Create folder
       uses: appleboy/ssh-action@master
       with:
