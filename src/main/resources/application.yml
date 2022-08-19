@@ -1,4 +1,3 @@
-
 account:
   activation:
     send: false
@@ -15,15 +14,11 @@ mongock:
 spring:
   application:
     name: ms-leganda
-  spring:
-    data:
-      mongodb:
-        host: localhost
-        port: 27017
-        database: leganda
-  devtools:
-    livereload:
-      enabled: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: db-leganda
   thymeleaf:
     cache: false
   mail:
@@ -34,10 +29,11 @@ spring:
     default-encoding: UTF-8
     protocol: smtp
     test-connection: false
-    activation-url: http://localhost:9090/activate
-    new-password-url: http://localhost:9090/nouveau-mot-de-passe
-    annonces-url: http://localhost:9090/demenagements
-    paiement-url: http://localhost:9090/compte/paiement
+    accountLink: ${server.host}/activer-mon-compte?code=
+    activation-url:  ${server.host}/activate
+    new-password-url:  ${server.host}/nouveau-mot-de-passe
+    annonces-url:  ${server.host}/annonces
+    paiement-url:  ${server.host}/compte/paiement
     properties:
       mail:
         smtp:

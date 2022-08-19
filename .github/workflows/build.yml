@@ -37,6 +37,11 @@ jobs:
     needs: create-folder
     steps:
       - uses: actions/checkout@master
+      - name: update configs
+        run: |
+         sed -i 's|IMAGE_NAME|simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}|' docker-compose.yml
+         sed -i 's|APP_JAR|simachille/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar|' Dockerfile
+
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
@@ -96,6 +101,7 @@ jobs:
       #    repository: maven-releases
        #   coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha }}
        #   assets: extension=jar
+       #   filename: ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
 
   dockerise-and-push-to-nexus:
     name: "dockerise-and-push-to-nexus"
@@ -111,58 +117,52 @@ jobs:
       - name: Check
         run: |
           ls -al
-      - name: Update dockerfile
+      
+      - name: rename
         run: |
-          cat Dockerfile
-          sed -i 's/APP_JAR/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar/g' Dockerfile
-          cat Dockerfile
+          mv ms-leganda-*.jar ms-leganda.jar
+          ls -al
+
+      - name: update configs
+        run: |
+         cat Dockerfile
+         sed -i 's|APP_JAR|simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}.jar|' Dockerfile
+         cat Dockerfile
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-      - name: Build and export
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          tags: ms-leganda:${{ github.ref_name }}-${{ github.sha }}
-
-      - name: check image
-        run: docker images
-
-      - name: tag image
-        run: docker tag ms-leganda:${{ github.ref_name }}-${{ github.sha }} https://nexus.chillo.fr/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
-
-      - name: push to nexus
-        run: docker push ${{ secrets.NEXUS_HOSTNAME }}/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
-
-      - name: Login to Nexus
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+     
+      - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.NEXUS_HOSTNAME }}
-          username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}/ms-leganda-${{ github.ref_name }}-${{ github.sha }}
+          tags: simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
 
-  # run-container:
-  #   name: "Run container"
-  #   runs-on: ubuntu-latest
-  #   needs: [dockerize, copy-configs,use,build-to-nexus,dockerise-and-push-to-nexus]
-  #   steps:
-  #   - name: Run container
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.RECETTE_APPLICATIONS_HOST }}
-  #       port: ${{ secrets.RECETTE_APPLICATIONS_PORT }}
-  #       username: ${{ secrets.RECETTE_APPLICATIONS_USERNAME }}
-  #       password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
-  #       key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
-  #       script: |
-  #         docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml stop
-  #         docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml rm -f
-  #         docker rmi simachille/simachille:develop -f
-  #         docker-compose -f /opt/applications/leganda/simachille/docker-compose.yml up -d
+  run-container:
+    name: "Run container"
+    runs-on: ubuntu-latest
+    needs: [copy-configs, build-to-nexus, dockerise-and-push-to-nexus]
+    steps:
+    - name: Run container
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.RECETTE_APPLICATIONS_HOST }}
+        port: ${{ secrets.RECETTE_APPLICATIONS_PORT }}
+        username: ${{ secrets.RECETTE_APPLICATIONS_USERNAME }}
+        password: ${{ secrets.RECETTE_APPLICATIONS_PASSWPRD }}
+        key: ${{ secrets.RECETTE_APPLICATIONS_SSH_PRIVATE_KEY }}
+        script: |
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml stop
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml rm -f
+          docker rmi simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }} -f
+          docker-compose -f /opt/applications/leganda/ms-leganda/docker-compose.yml up -d

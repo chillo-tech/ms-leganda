@@ -6,12 +6,6 @@ spring:
       host: db-mongo
   mail:
       host: ${server.host}
-      accountLink: ${server.host}/activer-mon-compte?code=
-      activation-url:  ${server.host}/activate
-      new-password-url:  ${server.host}/nouveau-mot-de-passe
-      annonces-url:  ${server.host}/demenagements
-      paiement-url:  ${server.host}/compte/paiement
-
 
 
 
