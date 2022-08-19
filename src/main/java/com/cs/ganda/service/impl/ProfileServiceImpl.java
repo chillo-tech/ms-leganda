@@ -8,6 +8,8 @@ import com.cs.ganda.service.ProfileService;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,12 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = this.authenticationDataService.getAuthenticatedProfile();
         profile.setAddress(address);
         this.profileRepository.save(profile);
+    }
+
+    @Override
+    public Profile getAuthenticateUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (Profile) authentication.getPrincipal();
     }
 
 }

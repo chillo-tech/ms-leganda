@@ -6,7 +6,7 @@ import com.cs.ganda.document.Profile;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface ProfileService extends UserDetailsService {
-
+    Profile getAuthenticateUser();
     void register(Profile profile);
 
     Profile update(Profile profile);
