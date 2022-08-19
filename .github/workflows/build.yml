@@ -97,7 +97,7 @@ jobs:
           repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
           assets: extension=jar
-          filename: ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
+          filename: /tmp/ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
 
   # run-container:
   #   name: "Run container"
