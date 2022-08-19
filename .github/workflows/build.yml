@@ -86,7 +86,7 @@ jobs:
       - name: Check
         run: |
           ls -al
-          ls -al target
+          ls -al /tmp
 
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
@@ -98,7 +98,7 @@ jobs:
           repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
           assets: extension=jar
-          filename: ./target/ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
+          filename: /tmp/ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
 
   # run-container:
   #   name: "Run container"
