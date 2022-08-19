@@ -12,13 +12,13 @@ permissions:
   contents: read
 
 jobs:
-
+  
   create-folder:
     name: Create folder
     runs-on: ubuntu-latest
     steps:
     - name: params
-      run: echo ${{ github.ref_name }} ${{ github.sha::7 }}
+      run: echo ${{ github.ref_name }} ${{ SHORT_SHA }}
     - name: Create folder
       uses: appleboy/ssh-action@master
       with:
@@ -58,20 +58,23 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
 
       - name: Build with Maven
         run: mvn -Dmaven.test.skip=true clean compile package
 
       - name: rename
         run: |
-          mv ./target/ms-leganda-0.0.1-SNAPSHOT.jar ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
+          mv ./target/ms-leganda-0.0.1-SNAPSHOT.jar ./target/ms-leganda-${{ github.ref_name }}-${{ SHORT_SHA }}.jar
           ls -al target
 
       - name: Upload jar
         uses: actions/upload-artifact@v3
         with:
           name: ms-leganda
-          path: ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
+          path: ./target/ms-leganda-${{ github.ref_name }}-${{ SHORT_SHA }}.jar
 
   build-to-nexus:
     name: "Build to nexus"
@@ -94,9 +97,9 @@ jobs:
           password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
           repository: maven-releases
-          coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha::7 }}
+          coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ SHORT_SHA }}
           assets: extension=jar
-          filename: ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
+          filename: ms-leganda-${{ github.ref_name }}-${{ SHORT_SHA }}.jar
 
   dockerise-and-push-to-nexus:
     name: "dockerise-and-push-to-nexus"
@@ -113,7 +116,7 @@ jobs:
       - name: Update dockerfile
         run: |
           cat Dockerfile
-          sed /APP_JAR/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar/
+          sed /APP_JAR/ms-leganda-${{ github.ref_name }}-${{ SHORT_SHA }}.jar/
           cat Dockerfile
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -134,7 +137,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}
+            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda-${{ github.ref_name }}-${{ SHORT_SHA }}
 
   # run-container:
   #   name: "Run container"
