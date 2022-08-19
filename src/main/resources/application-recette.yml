@@ -1,18 +1,12 @@
-app:
+server:
   host: http://api.leganda.chillo.fr
 spring:
   data:
     mongodb:
-      #username: rapplications
-      #password: rapplications
       host: db-mongo
       authentication-database: admin
   mail:
      host: mail-server
-     activation-url: ${app.host}/activate
-     new-password-url: ${app.host}/nouveau-mot-de-passe
-     annonces-url: ${app.host}/demenagements
-     paiement-url: ${app.host}/compte/paiement
 
 resources:
   images:

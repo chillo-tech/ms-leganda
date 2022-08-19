@@ -11,7 +11,9 @@ public interface MapBoxClient {
     @GetMapping(value = "${providers.mapbox.places}/{query}.json" +
             "?limit=5" +
             "&access_token=${providers.mapbox.access_token}" +
-            "&country=${providers.mapbox.country}"
+            "&session_token=${providers.mapbox.session_token}" +
+            "&country=${providers.mapbox.country}" +
+            "&language=FR"
     )
     String search(
             @PathVariable("query") String query,

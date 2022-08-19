@@ -1,8 +1,5 @@
-account:
-  activation:
-    send: false
-    code: "101010"
-
+server:
+  host: http://localhost:3000
 management:
   trace:
     http.enabled: true
@@ -14,19 +11,13 @@ management:
 spring:
   data:
     mongodb:
-      #username: rmongo
-      #password: ramba
       host: localhost
       port: 27017
       authentication-database: admin
 
   mail:
     host: localhost
-    port: 28825
-    activation-url: http://localhost:3000/activate
-    new-password-url: http://localhost:3000/nouveau-mot-de-passe
-    annonces-url: http://localhost:3000/demenagements
-    paiement-url: http://localhost:3000/compte/paiement
+    port: 25
     default-encoding: UTF-8
     properties:
       mail:

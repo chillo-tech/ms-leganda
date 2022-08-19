@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-@ChangeUnit(id = "category-initializer", order = "4", author = "achille")// runAlways je dois l'enlever après
+@ChangeUnit(id = "category-initializer", order = "1", author = "achille", runAlways = true)
 public class CategoryChangelog {
 
     private final MongoTemplate mongoTemplate;
@@ -48,7 +48,7 @@ public class CategoryChangelog {
         String data = new String(bdata, StandardCharsets.UTF_8);
         List<Category> categoryList = new Gson().fromJson(data, listType);
         mongoTemplate.dropCollection("CATEGORY");
-        categoryList.stream().forEach(category -> mongoTemplate.save(category));
+        categoryList.stream().forEach(mongoTemplate::save);
     }
 
     @RollbackExecution

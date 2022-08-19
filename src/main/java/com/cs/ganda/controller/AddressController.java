@@ -29,7 +29,7 @@ public class AddressController extends ApplicationController<Address, String> {
             @RequestParam String query,
             @RequestParam(defaultValue = "address") String types,
             @RequestParam(required = false) String proximity,
-            @RequestParam(defaultValue = "false") boolean autocomplete
+            @RequestParam(defaultValue = "true") boolean autocomplete
     ) {
         return this.addressService.search(query, types, proximity, autocomplete);
     }

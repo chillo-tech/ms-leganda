@@ -1,3 +1,5 @@
+server:
+  host: http://api.leganda.chillo.fr
 spring:
   data:
     mongodb:
@@ -7,10 +9,6 @@ spring:
       authentication-database: admin
   mail:
      host: mail-server
-     activation-url: https://demenous.chillo.fr/activate
-     new-password-url: https://demenous.chillo.fr/nouveau-mot-de-passe
-     annonces-url: https://demenous.chillo.fr/demenagements
-     paiement-url: https://demenous.chillo.fr/compte/paiement
 
 resources:
   images:

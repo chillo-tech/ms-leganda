@@ -176,7 +176,6 @@ public class AccountServiceImpl implements AccountService {
         this.profileService.register(currentProfile);
         if (sendAccountActivationCode) {
             this.confirmationTokenService.sendActivationCode(activationData);
-
         }
     }
 

@@ -1,11 +1,10 @@
-
 account:
   activation:
     send: false
     code: "101010"
 
 server:
-  port: 9090
+  port: 9091
   servlet:
     context-path: /api
   session.tracking-modes: 'cookie'
@@ -15,15 +14,11 @@ mongock:
 spring:
   application:
     name: ms-leganda
-  spring:
-    data:
-      mongodb:
-        host: localhost
-        port: 27017
-        database: leganda
-  devtools:
-    livereload:
-      enabled: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: db-leganda
   thymeleaf:
     cache: false
   mail:
@@ -34,10 +29,11 @@ spring:
     default-encoding: UTF-8
     protocol: smtp
     test-connection: false
-    activation-url: http://localhost:9090/activate
-    new-password-url: http://localhost:9090/nouveau-mot-de-passe
-    annonces-url: http://localhost:9090/demenagements
-    paiement-url: http://localhost:9090/compte/paiement
+    accountLink: ${server.host}/activer-mon-compte?code=
+    activation-url:  ${server.host}/activate
+    new-password-url:  ${server.host}/nouveau-mot-de-passe
+    annonces-url:  ${server.host}/annonces
+    paiement-url:  ${server.host}/compte/paiement
     properties:
       mail:
         smtp:
@@ -67,16 +63,19 @@ providers:
   mapbox:
     domain: "https://api.mapbox.com"
     places: "geocoding/v5/mapbox.places"
-    country: "FR,CM,DE,US"
-    access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJja3Zvd3EzcmswaThkMnZrZ25iYmtveDBhIn0.pDR7pKL18d3iz5NoaRmWYg"
+    suggest: "search/v1/suggest"
+    country: ""
+    session_token: "3b43fe19-742a-4636-92a2-1d879fd2852e"
+    #access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJja3Zvd3EzcmswaThkMnZrZ25iYmtveDBhIn0.pDR7pKL18d3iz5NoaRmWYg"
+    access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJjbDdhMXJucWcwNGc1NDFycjhrZmoxbGVuIn0.sExmH0VyULHvnVju9Xl10Q"
 logging:
   pattern:
     file: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
     console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
   level:
-    ROOT: INFO
-    com.cs.ganda.: INFO
-feign.client.config.default.loggerLevel: full
+    ROOT: WARN
+    com.cs.ganda.: WARN
+feign.client.config.default.loggerLevel: BASIC
 resources:
   images:
     folder: "/images/applications/leganda/images"
