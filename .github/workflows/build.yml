@@ -115,7 +115,7 @@ jobs:
       - name: Update dockerfile
         run: |
           cat Dockerfile
-          sed -i 's/APP_JAR/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar/g'
+          sed -i 's/APP_JAR/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar/g' Dockerfile
           cat Dockerfile
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
