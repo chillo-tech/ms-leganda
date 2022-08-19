@@ -124,7 +124,6 @@ jobs:
         with:
           context: .
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}:latest
             ${{ secrets.NEXUS_HOSTNAME }}:/simachille/ms-leganda
             ${{ secrets.NEXUS_HOSTNAME }}:${{ github.ref_name }}
             ${{ secrets.NEXUS_HOSTNAME }}:${{ github.sha }}
