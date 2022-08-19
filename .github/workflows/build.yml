@@ -82,10 +82,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ms-leganda
-          path: /tmp
+          path: /github/workspace/tmp
       - name: Check
         run: |
-          ls -al /tmp
+          ls -al /github/workspace/tmp
 
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
@@ -97,7 +97,7 @@ jobs:
           repository: maven-releases
           coordinates: groupId=com.cs artifactId=ms-leganda version=0.0.1
           assets: extension=jar
-          filename: /tmp/ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
+          filename: /github/workspace/tmp/ms-leganda--${{ github.ref_name }}-${{ github.sha }}.jar
 
   # run-container:
   #   name: "Run container"
