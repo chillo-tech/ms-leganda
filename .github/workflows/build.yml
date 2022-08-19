@@ -124,7 +124,7 @@ jobs:
         with:
           context: .
           tags: |
-            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
+            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.sha }}
 
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
