@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: params
-      run: echo ${{ github.ref_name }} ${{ github.sha }}
+      run: echo ${{ github.ref_name }} ${{ github.sha::7 }}
     - name: Create folder
       uses: appleboy/ssh-action@master
       with:
@@ -64,14 +64,14 @@ jobs:
 
       - name: rename
         run: |
-          mv ./target/ms-leganda-0.0.1-SNAPSHOT.jar ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
+          mv ./target/ms-leganda-0.0.1-SNAPSHOT.jar ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
           ls -al target
 
       - name: Upload jar
         uses: actions/upload-artifact@v3
         with:
           name: ms-leganda
-          path: ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
+          path: ./target/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
 
   build-to-nexus:
     name: "Build to nexus"
@@ -89,19 +89,57 @@ jobs:
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
-          serverUrl: https://nexus.chillo.fr
-          username: admin
-          password: 8492dbf6-bedd-48e4-8ee6-71ada6bcf505
+          serverUrl: ${{ secrets.NEXUS_HOSTNAME }}
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
           repository: maven-releases
-          coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha }}
+          coordinates: groupId=com.cs artifactId=ms-leganda version=${{ github.ref_name }}-${{ github.sha::7 }}
           assets: extension=jar
-          filename: ms-leganda-${{ github.ref_name }}-${{ github.sha }}.jar
+          filename: ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar
+
+  dockerise-and-push-to-nexus:
+    name: "dockerise-and-push-to-nexus"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ms-leganda
+      - name: Check
+        run: |
+          ls -al
+      - name: Update dockerfile
+        run: |
+          cat Dockerfile
+          sed /APP_JAR/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}.jar/
+          cat Dockerfile
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.NEXUS_HOSTNAME }}
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda-${{ github.ref_name }}-${{ github.sha::7 }}
 
   # run-container:
   #   name: "Run container"
   #   runs-on: ubuntu-latest
-  #   needs: [dockerize, copy-configs,use,build-to-nexus]
+  #   needs: [dockerize, copy-configs,use,build-to-nexus,dockerise-and-push-to-nexus]
   #   steps:
   #   - name: Run container
   #     uses: appleboy/ssh-action@master
