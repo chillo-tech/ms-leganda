@@ -128,7 +128,7 @@ jobs:
         run: docker
 
       - name: tag image
-        run: docker images
+        run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
       - name: push to nexus
         run: docker push ${{ secrets.NEXUS_HOSTNAME }}/simachille/ms-leganda:${{ github.ref_name }}-${{ github.sha }}
 
