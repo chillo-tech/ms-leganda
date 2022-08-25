@@ -57,6 +57,19 @@ public class BaseEmails {
 
         return this.getEmail(replacements, ADD_TEMPLATE);
     }
+    public Email newPublication(Ad ad,String email) {
+
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put(TITRE, "Une annonce vient d'être créée");
+        replacements.put(MESSAGE, "Près de chez vous!!!");
+        replacements.put(PRENOM_DESTINATAIRE, ad.getProfile().getFirstName());
+        replacements.put(NOM_DESTINATAIRE, ad.getProfile().getLastName());
+        replacements.put(EMAIL_DESTINATAIRE, email);
+        replacements.put(LIEN_URL, String.format("%s/%s", annoncesUrl, ad.getId()));
+        replacements.put(LIEN_TEXTE, NEW_PUBLICATION_LINK);
+
+        return this.getEmail(replacements, ADD_TEMPLATE);
+    }
 
     private Email getEmail(Map<String, String> replacements, String template) {
         String message = this.eMailContentBuilder.getTemplate(template, replacements);

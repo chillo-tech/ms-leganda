@@ -18,7 +18,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: db-leganda
+      database: test
   thymeleaf:
     cache: false
   mail:
@@ -29,11 +29,11 @@ spring:
     default-encoding: UTF-8
     protocol: smtp
     test-connection: false
-    accountLink: ${server.host}/activer-mon-compte?code=
-    activation-url:  ${server.host}/activate
-    new-password-url:  ${server.host}/nouveau-mot-de-passe
-    annonces-url:  ${server.host}/annonces
-    paiement-url:  ${server.host}/compte/paiement
+    accountLink: http://localhost:9090/activer-mon-compte?code=
+    activation-url:  http://localhost:9090/activate
+    new-password-url:  http://localhost:9090/nouveau-mot-de-passe
+    annonces-url:  http://localhost:9090/annonces
+    paiement-url:  http://localhost:9090/compte/paiement
     properties:
       mail:
         smtp:

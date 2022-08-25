@@ -19,6 +19,13 @@ public class MailsService {
         Email email = this.baseEmails.newPublication(ad);
         mailSender.send(email);
     }
+    /**/
+    @Async
+    public void newPublication(Ad ad,String emailDestinataire) {
+        Email email = this.baseEmails.newPublication(ad,emailDestinataire);
+        mailSender.send(email);
+    }
+    /**/
 
     @Async
     public void newProfile(Profile profile, String activationCode) {

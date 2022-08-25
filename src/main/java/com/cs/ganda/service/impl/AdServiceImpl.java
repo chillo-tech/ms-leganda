@@ -9,7 +9,9 @@ import com.cs.ganda.repository.AdRepository;
 import com.cs.ganda.service.AdService;
 import com.cs.ganda.service.CommonsMethods;
 import com.cs.ganda.service.ImageService;
+import com.cs.ganda.service.ProfileService;
 import com.cs.ganda.service.emails.MailsService;
+import com.cs.ganda.service.sms.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,13 +51,18 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
     private final CommonsMethods commonsMethods;
     private final MongoTemplate mongoTemplate;
     private final ImageService imageService;
+    private final ProfileService profileService;
+    private final SmsService smsService;
+    private String sms;
 
     public AdServiceImpl(
             AdRepository adRepository,
             MailsService mailsService,
             ImageService imageService,
             CommonsMethods commonsMethods,
-            MongoTemplate mongoTemplate
+            MongoTemplate mongoTemplate,
+            ProfileService profileService,
+            SmsService smsService
     ) {
         super(adRepository);
         this.imageService = imageService;
@@ -63,6 +70,8 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         this.adRepository = adRepository;
         this.commonsMethods = commonsMethods;
         this.mongoTemplate = mongoTemplate;
+        this.profileService = profileService;
+        this.smsService = smsService;
     }
 
     @Override
@@ -93,6 +102,30 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         Ad savedAd = this.adRepository.save(ad);
 
         this.mailsService.newPublication(savedAd);
+        this.sms ="Bonjour Cher client,\n";
+        this.sms += "une nouvelle annonce vient d'être créé près de chez vous.\n";
+        this.sms += "titre de l'annonce :"+savedAd.getName()+"\n";
+        this.sms += "description de l'annonce :"+savedAd.getDescription()+"\n";
+        this.sms += "par :"+savedAd.getProfile().getLastName()+" "+savedAd.getProfile().getFirstName()+"\n\n\n";
+        this.sms += "LE GANDA Votre coin qualité ";
+        /**/
+
+        List<Profile> profileList = profileService.findByAddress(savedAd.getAddress());
+        if(!profileList.isEmpty()) {
+            for (Profile p : profileList) {
+                //verifier qu'il y'a une adresse mail associé au profile
+                if (!p.getEmail().isEmpty()) {
+
+                    //ne pas envoyé au créateur du post
+                   // if (!p.getEmail().equals(savedAd.getProfile().getEmail())) {
+                        this.mailsService.newPublication(savedAd, p.getEmail());
+                        this.smsService.send(p.getPhoneIndex(),p.getPhone(),this.sms);
+                   // }
+                }
+            }
+        }
+
+        /**/
         this.imageService.saveAdImages(ad);
         return savedAd;
     }
