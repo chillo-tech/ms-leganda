@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.Boolean.TRUE;
 
@@ -24,17 +27,18 @@ public class BaseEmails {
     private static final String TITRE = "titre";
     private static final String MESSAGE = "message";
     private static final String EMAIL_DESTINATAIRE = "email";
-    private  Profile profile;
+    private static final String EMAIL_CCI = "cci";
     private final EMailContentBuilder eMailContentBuilder;
     private final String annoncesUrl;
     private final String activationUrl;
     private final String from;
+    private Profile profile;
 
     public BaseEmails(
-            EMailContentBuilder eMailContentBuilder,
-            @Value("${spring.mail.from:contact@leganda.com}") String from,
-            @Value("${spring.mail.annonces-url}") String annoncesUrl,
-            @Value("${spring.mail.activation-url}") String activationUrl
+            final EMailContentBuilder eMailContentBuilder,
+            @Value("${spring.mail.from:contact@leganda.com}") final String from,
+            @Value("${spring.mail.annonces-url}") final String annoncesUrl,
+            @Value("${spring.mail.activation-url}") final String activationUrl
     ) {
         this.eMailContentBuilder = eMailContentBuilder;
         this.annoncesUrl = annoncesUrl;
@@ -42,9 +46,9 @@ public class BaseEmails {
         this.from = from;
     }
 
-    public Email newPublication(Ad ad) {
+    public Email newPublication(final Ad ad) {
 
-        Map<String, String> replacements = new HashMap<>();
+        final Map<String, Object> replacements = new HashMap<>();
         replacements.put(TITRE, "Une annonce vient d'être créée");
         replacements.put(MESSAGE, "Une annonce vient d'être créée");
         replacements.put(PRENOM_DESTINATAIRE, ad.getProfile().getFirstName());
@@ -52,40 +56,46 @@ public class BaseEmails {
         //avant c'était from qui était appelé alors que from fait référence à contact@leganda.fr
         // il fallait tout simplement changer from par le mail de celui qui fait le post
         replacements.put(EMAIL_DESTINATAIRE, ad.getProfile().getEmail());
-        replacements.put(LIEN_URL, String.format("%s/%s", annoncesUrl, ad.getId()));
+        replacements.put(LIEN_URL, String.format("%s/%s", this.annoncesUrl, ad.getId()));
         replacements.put(LIEN_TEXTE, NEW_PUBLICATION_LINK);
 
         return this.getEmail(replacements, ADD_TEMPLATE);
     }
-    public Email newPublication(Ad ad,String email) {
 
-        Map<String, String> replacements = new HashMap<>();
+    public Email newPublication(final Ad ad, final List<String> emails) {
+
+
+        final Map<String, Object> replacements = new HashMap<>();
         replacements.put(TITRE, "Une annonce vient d'être créée");
         replacements.put(MESSAGE, "Près de chez vous!!!");
         replacements.put(PRENOM_DESTINATAIRE, ad.getProfile().getFirstName());
         replacements.put(NOM_DESTINATAIRE, ad.getProfile().getLastName());
-        replacements.put(EMAIL_DESTINATAIRE, email);
-        replacements.put(LIEN_URL, String.format("%s/%s", annoncesUrl, ad.getId()));
+        replacements.put(EMAIL_DESTINATAIRE, this.from);
+        replacements.put(EMAIL_CCI, emails);
+        replacements.put(LIEN_URL, String.format("%s/%s", this.annoncesUrl, ad.getId()));
         replacements.put(LIEN_TEXTE, NEW_PUBLICATION_LINK);
 
         return this.getEmail(replacements, ADD_TEMPLATE);
     }
 
-    private Email getEmail(Map<String, String> replacements, String template) {
-        String message = this.eMailContentBuilder.getTemplate(template, replacements);
-        Email email = new Email(from, replacements.get(EMAIL_DESTINATAIRE), replacements.get(TITRE), message);
+    private Email getEmail(final Map<String, Object> replacements, final String template) {
+        final String message = this.eMailContentBuilder.getTemplate(template, replacements);
+        final Email email = new Email(this.from, replacements.get(EMAIL_DESTINATAIRE).toString(), replacements.get(TITRE).toString(), message);
+        if (replacements.get(EMAIL_CCI) != null) {
+            email.setCci(Stream.of(replacements.get(EMAIL_CCI)).map(Object::toString).collect(Collectors.toList()));
+        }
         email.setHtml(TRUE);
         return email;
     }
 
-    public Email newProfile(Profile profile, String activationCode) {
-        Map<String, String> replacements = new HashMap<>();
+    public Email newProfile(final Profile profile, final String activationCode) {
+        final Map<String, Object> replacements = new HashMap<>();
         replacements.put(TITRE, "Activez votre compte");
         replacements.put(MESSAGE, "Une annonce vient d'être créée");
         replacements.put(PRENOM_DESTINATAIRE, profile.getFirstName());
         replacements.put(NOM_DESTINATAIRE, profile.getLastName());
         replacements.put(EMAIL_DESTINATAIRE, profile.getEmail());
-        replacements.put(LIEN_URL, String.format("%s/%s", activationUrl, activationCode));
+        replacements.put(LIEN_URL, String.format("%s/%s", this.activationUrl, activationCode));
         replacements.put(LIEN_TEXTE, String.format("Veuillez saisir le code %s", activationCode));
 
         return this.getEmail(replacements, ACCOUNT_TEMPLATE);

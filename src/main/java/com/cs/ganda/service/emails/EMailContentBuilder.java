@@ -15,20 +15,20 @@ public class EMailContentBuilder {
     private static final String MESSAGE = "message";
     private final TemplateEngine templateEngine;
 
-    public EMailContentBuilder(TemplateEngine templateEngine) {
+    public EMailContentBuilder(final TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
 
-    public String getTemplate(String templateId, Map<String, String> replacements) {
+    public String getTemplate(final String templateId, final Map<String, Object> replacements) {
 
-        Context context = new Context();
+        final Context context = new Context();
         context.setVariable(MESSAGE, replacements.get(MESSAGE));
         context.setVariable(PRENOM_DESTINATAIRE, replacements.get(PRENOM_DESTINATAIRE));
         context.setVariable(NOM_DESTINATAIRE, replacements.get(NOM_DESTINATAIRE));
         context.setVariable(LIEN_URL, replacements.get(LIEN_URL));
         context.setVariable(LIEN_TEXTE, replacements.get(LIEN_TEXTE));
-        return templateEngine.process(templateId, context);
+        return this.templateEngine.process(templateId, context);
     }
 
 
