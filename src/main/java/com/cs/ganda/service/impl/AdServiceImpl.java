@@ -6,12 +6,8 @@ import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.enums.Status;
 import com.cs.ganda.repository.AdRepository;
-import com.cs.ganda.service.AdService;
-import com.cs.ganda.service.CommonsMethods;
-import com.cs.ganda.service.ImageService;
-import com.cs.ganda.service.ProfileService;
+import com.cs.ganda.service.*;
 import com.cs.ganda.service.emails.MailsService;
-import com.cs.ganda.service.sms.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,18 +47,17 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
     private final CommonsMethods commonsMethods;
     private final MongoTemplate mongoTemplate;
     private final ImageService imageService;
+    private final NotificationService notificationService;
     private final ProfileService profileService;
-    private final SmsService smsService;
-    private String sms;
 
     public AdServiceImpl(
-            AdRepository adRepository,
-            MailsService mailsService,
-            ImageService imageService,
-            CommonsMethods commonsMethods,
-            MongoTemplate mongoTemplate,
-            ProfileService profileService,
-            SmsService smsService
+            final AdRepository adRepository,
+            final MailsService mailsService,
+            final ImageService imageService,
+            final CommonsMethods commonsMethods,
+            final MongoTemplate mongoTemplate,
+            final NotificationService notificationService,
+            final ProfileService profileService
     ) {
         super(adRepository);
         this.imageService = imageService;
@@ -70,23 +65,23 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         this.adRepository = adRepository;
         this.commonsMethods = commonsMethods;
         this.mongoTemplate = mongoTemplate;
+        this.notificationService = notificationService;
         this.profileService = profileService;
-        this.smsService = smsService;
     }
 
     @Override
-    public void activate(ActivationData activationData) {
+    public void activate(final ActivationData activationData) {
     }
 
     @Override
-    public Ad create(Ad ad) throws UsernameNotFoundException {
+    public Ad create(final Ad ad) throws UsernameNotFoundException {
         Objects.requireNonNull(ad.getName(), String.format(MISSING_FIELD, "Nom"));
-        Instant currentStart = ad.getValidity().getStart();
-        int hour = currentStart.atZone(ZoneOffset.UTC).getHour();
-        int minute = currentStart.atZone(ZoneOffset.UTC).getMinute();
-        int second = currentStart.atZone(ZoneOffset.UTC).getSecond();
+        final Instant currentStart = ad.getValidity().getStart();
+        final int hour = currentStart.atZone(ZoneOffset.UTC).getHour();
+        final int minute = currentStart.atZone(ZoneOffset.UTC).getMinute();
+        final int second = currentStart.atZone(ZoneOffset.UTC).getSecond();
 
-        Instant newStart = ad.getValidity().getDate();
+        final Instant newStart = ad.getValidity().getDate();
         newStart.atZone(ZoneOffset.UTC)
                 .withHour(hour)
                 .withMinute(minute)
@@ -94,56 +89,37 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
                 .toInstant();
         ad.getValidity().setStart(newStart);
 
-        Profile profile = this.getAuthenticatedProfile();
+        final Profile profile = this.getAuthenticatedProfile();
         ad.setActive(TRUE);
         ad.setProfile(profile);
 
         ad.setCreation(Instant.now());
-        Ad savedAd = this.adRepository.save(ad);
+        final Ad savedAd = this.adRepository.save(ad);
 
         this.mailsService.newPublication(savedAd);
-        this.sms ="Bonjour Cher client,\n";
-        this.sms += "une nouvelle annonce vient d'être créé près de chez vous.\n";
-        this.sms += "titre de l'annonce :"+savedAd.getName()+"\n";
-        this.sms += "description de l'annonce :"+savedAd.getDescription()+"\n";
-        this.sms += "par :"+savedAd.getProfile().getLastName()+" "+savedAd.getProfile().getFirstName()+"\n\n\n";
-        this.sms += "LE GANDA Votre coin qualité ";
-        /**/
 
-        List<Profile> profileList = profileService.findByAddress(savedAd.getAddress());
-        if(!profileList.isEmpty()) {
-            for (Profile p : profileList) {
-                //verifier qu'il y'a une adresse mail associé au profile
-                if (!p.getEmail().isEmpty()) {
-
-                    //ne pas envoyé au créateur du post
-                   // if (!p.getEmail().equals(savedAd.getProfile().getEmail())) {
-                        this.mailsService.newPublication(savedAd, p.getEmail());
-                        this.smsService.send(p.getPhoneIndex(),p.getPhone(),this.sms);
-                   // }
-                }
-            }
-        }
-
-        /**/
         this.imageService.saveAdImages(ad);
+        final List<Profile> profileList = this.profileService.findByAddress(savedAd.getAddress());
+        this.notificationService.newAdNotificationToCustomers(profileList, savedAd);
         return savedAd;
+
+
     }
 
 
     @Override
-    public List<Ad> search(SearchParamsDTO searchParams, int page, int size) {
+    public List<Ad> search(final SearchParamsDTO searchParams, final int page, final int size) {
         log.info("Recherche avec les critères {} {} {}", searchParams, page, size);
-        Instant date = Instant.now();
-        Query query = new Query(Criteria.where("active").is(TRUE));
+        final Instant date = Instant.now();
+        final Query query = new Query(Criteria.where("active").is(TRUE));
         query.addCriteria(Criteria.where("validity.start").gte(date));
 
         if (searchParams.getQuery() != null && !searchParams.getQuery().trim().isEmpty()) {
-            Criteria criteria = new Criteria();
+            final Criteria criteria = new Criteria();
             criteria.orOperator(
                     Criteria.where("name").regex(searchParams.getQuery(), "i"),
                     Criteria.where("description").regex(searchParams.getQuery(), "i"),
-                    Criteria.where("category.name").regex(searchParams.getQuery(),"i")
+                    Criteria.where("category.name").regex(searchParams.getQuery(), "i")
             );
             query.addCriteria(criteria);
         }
@@ -160,13 +136,13 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
             );
         }
 
-        Pageable pageRequest = PageRequest.of(page, size, Sort.by(ASC, "validity.start"));
+        final Pageable pageRequest = PageRequest.of(page, size, Sort.by(ASC, "validity.start"));
         query.with(pageRequest);
         return this.mongoTemplate.find(query, Ad.class);
     }
 
     @Override
-    public List<Ad> findAllByProfileIdIn(List<String> ids) {
+    public List<Ad> findAllByProfileIdIn(final List<String> ids) {
         return this.adRepository
                 .findAllByProfileIdIn(ids)
                 .filter(ad -> ad.getValidity().getStart().isAfter(Instant.now()))
@@ -174,17 +150,17 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
     }
 
     @Override
-    public Ad read(String id) {
-        Ad ad = this.adRepository.findById(id)
+    public Ad read(final String id) {
+        final Ad ad = this.adRepository.findById(id)
                 .orElseThrow(() -> new NullPointerException("Aucune entite ne correspond à l'id " + id));
-        updateViews(ad.getId());
+        this.updateViews(ad.getId());
         return ad;
     }
 
 
-    private void updateViews(String id) {
-        Query query = new Query(where("id").is(id));
-        Update update = new Update().inc("views", 1);
+    private void updateViews(final String id) {
+        final Query query = new Query(where("id").is(id));
+        final Update update = new Update().inc("views", 1);
         this.mongoTemplate.updateFirst(query, update, Ad.class);
     }
 

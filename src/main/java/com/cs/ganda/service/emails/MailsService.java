@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @Service
@@ -15,22 +17,23 @@ public class MailsService {
     private final MailsSender mailSender;
 
     @Async
-    public void newPublication(Ad ad) {
-        Email email = this.baseEmails.newPublication(ad);
-        mailSender.send(email);
+    public void newPublication(final Ad ad) {
+        final Email email = this.baseEmails.newPublication(ad);
+        this.mailSender.send(email);
     }
+
     /**/
     @Async
-    public void newPublication(Ad ad,String emailDestinataire) {
-        Email email = this.baseEmails.newPublication(ad,emailDestinataire);
-        mailSender.send(email);
+    public void newPublication(final Ad ad, final List<String> emailDestinataire) {
+        final Email email = this.baseEmails.newPublication(ad, emailDestinataire);
+        this.mailSender.send(email);
     }
     /**/
 
     @Async
-    public void newProfile(Profile profile, String activationCode) {
-        Email email = this.baseEmails.newProfile(profile, activationCode);
-        mailSender.send(email);
+    public void newProfile(final Profile profile, final String activationCode) {
+        final Email email = this.baseEmails.newProfile(profile, activationCode);
+        this.mailSender.send(email);
     }
 
 }

@@ -21,29 +21,29 @@ public class MailsSender {
 
     private final JavaMailSender mailSender;
 
-    public MailsSender(JavaMailSender mailSender) {
+    public MailsSender(final JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     @Async
-    public void send(Email eParams) {
+    public void send(final Email eParams) {
         if (eParams.isHtml()) {
             try {
-                sendHtmlMail(eParams);
-            } catch (MessagingException e) {
-                log.error("Could not send email to : {} Error = {}", eParams.getToAsList(), e.getMessage());
+                this.sendHtmlMail(eParams);
+            } catch (final MessagingException e) {
+                log.error("Could not send email to : {} Error = {}", eParams.getTo(), e.getMessage());
             }
         } else {
-            sendPlainTextMail(eParams);
+            this.sendPlainTextMail(eParams);
             eParams.setTo(Collections.singletonList(eParams.getFrom()));
-            sendPlainTextMail(eParams);
+            this.sendPlainTextMail(eParams);
         }
     }
 
-    private void sendHtmlMail(Email eParams) throws MessagingException {
-        boolean isHtml = true;
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MULTIPART_MODE_MIXED_RELATED,
+    private void sendHtmlMail(final Email eParams) throws MessagingException {
+        final boolean isHtml = true;
+        final MimeMessage message = this.mailSender.createMimeMessage();
+        final MimeMessageHelper helper = new MimeMessageHelper(message, MULTIPART_MODE_MIXED_RELATED,
                 UTF_8.name());
 
 
@@ -57,11 +57,11 @@ public class MailsSender {
         if (eParams.getCc().size() > 0) {
             helper.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
         }
-        mailSender.send(message);
+        this.mailSender.send(message);
     }
 
-    private void sendPlainTextMail(Email eParams) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+    private void sendPlainTextMail(final Email eParams) {
+        final SimpleMailMessage mailMessage = new SimpleMailMessage();
         eParams.getTo().toArray(new String[eParams.getTo().size()]);
         mailMessage.setTo(eParams.getTo().toArray(new String[eParams.getTo().size()]));
         mailMessage.setReplyTo(eParams.getFrom());
@@ -71,6 +71,6 @@ public class MailsSender {
         if (eParams.getCc().size() > 0) {
             mailMessage.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
         }
-        mailSender.send(mailMessage);
+        this.mailSender.send(mailMessage);
     }
 }
