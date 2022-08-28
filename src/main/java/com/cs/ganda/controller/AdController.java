@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -30,7 +30,7 @@ public class AdController extends ApplicationController<Ad, String> {
 
     @PostMapping(value = "/search")
     public @ResponseBody
-    List<Ad> search(
+    Stream<Ad> search(
             @RequestBody SearchParamsDTO searchParams,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
