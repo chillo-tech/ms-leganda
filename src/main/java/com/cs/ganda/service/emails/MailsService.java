@@ -22,13 +22,11 @@ public class MailsService {
         this.mailSender.send(email);
     }
 
-    /**/
     @Async
     public void newPublication(final Ad ad, final List<String> emailDestinataire) {
         final Email email = this.baseEmails.newPublication(ad, emailDestinataire);
         this.mailSender.send(email);
     }
-    /**/
 
     @Async
     public void newProfile(final Profile profile, final String activationCode) {

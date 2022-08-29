@@ -36,7 +36,7 @@ public class Email {
         this.to = List.of(to);
         this.subject = subject;
         this.message = message;
-
-
+        this.cc = new ArrayList<String>();
+        this.cci = new ArrayList<String>();
     }
 }

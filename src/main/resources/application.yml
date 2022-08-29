@@ -22,13 +22,13 @@ spring:
   thymeleaf:
     cache: false
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: katyberte2@gmail.com
-    password: srewjmweyjermxxi
-    default-encoding: UTF-8
-    protocol: smtp
-    test-connection: false
+#     host: smtp.gmail.com
+#     port: 587
+#     username: katyberte2@gmail.com
+#     password: srewjmweyjermxxi
+#     default-encoding: UTF-8
+#     protocol: smtp
+#     test-connection: false
     accountLink: http://localhost:9090/activer-mon-compte?code=
     activation-url:  http://localhost:9090/activate
     new-password-url:  http://localhost:9090/nouveau-mot-de-passe
@@ -45,7 +45,7 @@ spring:
   sms:
     twilo:
       sid: ACcbb01f55e3469ff5eea683ebc1aac50f
-      token: e9af1368a0e58e3f423f755073a1ee90
+      token: 1543e11fdc238805c44e621af48949df
       vaid: VAe62952bb863b850e20fb3caa82451131
 jwt:
   header: "Authorization"
@@ -66,7 +66,6 @@ providers:
     suggest: "search/v1/suggest"
     country: ""
     session_token: "3b43fe19-742a-4636-92a2-1d879fd2852e"
-    #access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJja3Zvd3EzcmswaThkMnZrZ25iYmtveDBhIn0.pDR7pKL18d3iz5NoaRmWYg"
     access_token: "pk.eyJ1IjoiYWNoaWxsZW1ib3VndWVuZyIsImEiOiJjbDdhMXJucWcwNGc1NDFycjhrZmoxbGVuIn0.sExmH0VyULHvnVju9Xl10Q"
 logging:
   pattern:

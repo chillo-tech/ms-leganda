@@ -54,8 +54,11 @@ public class MailsSender {
         helper.setFrom(eParams.getFrom());
         helper.setSubject(eParams.getSubject());
         helper.setText(eParams.getMessage(), isHtml);
-        if (eParams.getCc().size() > 0) {
+        if (eParams.getCc() != null && eParams.getCc().size() > 0) {
             helper.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
+        }
+        if (eParams.getCci() != null && eParams.getCci().size() > 0) {
+            helper.setBcc(eParams.getCci().toArray(new String[eParams.getCci().size()]));
         }
         this.mailSender.send(message);
     }

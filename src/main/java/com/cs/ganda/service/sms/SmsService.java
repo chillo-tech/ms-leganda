@@ -84,7 +84,7 @@ public class SmsService {
         Twilio.init(this.ACCOUNT_SID, this.AUTH_TOKEN);
 
         phones.stream().map(PhoneNumber::new).forEach(mappedPhone -> {
-            final Message message = Message.creator(mappedPhone, "+761705745", finalSms)
+            final Message message = Message.creator(mappedPhone, new PhoneNumber("+33761705745"), finalSms)
                     .create();
 
             log.info(String.format("l'id du message envoyé à %s est %s", mappedPhone, message.getSid()));

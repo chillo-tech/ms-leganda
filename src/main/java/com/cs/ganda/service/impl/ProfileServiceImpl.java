@@ -1,8 +1,6 @@
 package com.cs.ganda.service.impl;
 
-import com.cs.ganda.document.Ad;
 import com.cs.ganda.document.Address;
-import com.cs.ganda.document.Location;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.repository.ProfileRepository;
 import com.cs.ganda.service.AuthenticationDataService;
@@ -44,7 +42,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final MailsService mailsService;
 
     @Override
-    public void register(Profile profile) {
+    public void register(final Profile profile) {
         profile.setActive(FALSE);
         profile.setFullPhone(profile.getPhoneIndex() + profile.getPhone());
         profile.setRoles(Sets.newHashSet(USER));
@@ -52,52 +50,52 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile update(Profile profile) {
+    public Profile update(final Profile profile) {
         profile.setRoles(Sets.newHashSet(USER));
         profile.setFullPhone(profile.getPhoneIndex() + profile.getPhone());
-        Profile currentProfile = this.findByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
+        final Profile currentProfile = this.findByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
         try {
             BeanUtils.copyProperties(currentProfile, profile);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             e.printStackTrace();
         }
         return this.profileRepository.save(currentProfile);
     }
 
     @Override
-    public Profile findByEmail(String email) {
+    public Profile findByEmail(final String email) {
         return this.profileRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
     }
 
-    public Profile findByPhoneAndPhoneIndex(String phone, String phoneIndex) {
+    @Override
+    public Profile findByPhoneAndPhoneIndex(final String phone, final String phoneIndex) {
         return this.profileRepository.findByPhoneAndPhoneIndex(phone, phoneIndex).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, phone)));
     }
 
     @Override
-    public Profile findById(String id) {
+    public Profile findById(final String id) {
         return this.profileRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, "identifiant transmis")));
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return this.profileRepository.findByFullPhone(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, username)));
     }
 
     @Override
-    public void updateAddress(Address address) {
-        Profile profile = this.authenticationDataService.getAuthenticatedProfile();
+    public void updateAddress(final Address address) {
+        final Profile profile = this.authenticationDataService.getAuthenticatedProfile();
         profile.setAddress(address);
         this.profileRepository.save(profile);
     }
 
-    /**/
     @Override
-    public List<Profile> findByAddress(Address address) {
+    public List<Profile> findByAddress(final Address address) {
         log.info("Les profiles par localisation {} ", address.getLocation());
-        Query query = new Query(Criteria.where("active").is(TRUE));
-        if (address.getLocation().getCoordinates()!=null){
+        final Query query = new Query(Criteria.where("active").is(TRUE));
+        if (address.getLocation().getCoordinates() != null) {
             query.addCriteria(
                     Criteria.where("address.location.coordinates")
                             .withinSphere(
@@ -110,11 +108,10 @@ public class ProfileServiceImpl implements ProfileService {
         }
         return this.mongoTemplate.find(query, Profile.class);
     }
-    /**/
 
     @Override
     public Profile getAuthenticateUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (Profile) authentication.getPrincipal();
     }
 

@@ -2,7 +2,7 @@ server:
   host: http://localhost:3000
 account:
   activation:
-    send: false
+    send: true
     code: "101010"
 
 management:

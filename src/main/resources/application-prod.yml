@@ -3,8 +3,6 @@ server:
 spring:
   data:
     mongodb:
-      #username: rapplications
-      #password: rapplications
       host: db-mongo
       authentication-database: admin
   mail:
@@ -14,10 +12,3 @@ resources:
   images:
     folder: "images/leganda"
     host: "https://api.leganda.chillo.fr/assets"
-
-provider:
-  stripe:
-    secret-key: sk_test_51IGpLUHU7kKe8gmPt3PSfmD2Xbalw8eBuwRJGXwkrfxrTkvnHzvjPspcAjr3vLRTDMCpf52HUE0TOlyTE3CAUsaK007fmGY5bG
-    public-key: pk_test_51IGpLUHU7kKe8gmPN8Mpm9zYXhi1L8PX2qPreTOKxBhOWqzQrojbyB25D98FMtdBZVMPSsQV2W9qygUOnAioKgaQ006TDtzpbG
-
-

@@ -99,17 +99,11 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
 
         ad.setCreation(Instant.now());
         final Ad savedAd = this.adRepository.save(ad);
-
         this.mailsService.newPublication(savedAd);
-
         this.imageService.saveAdImages(ad);
-        final List<Profile> profileList = this.profileService.findByAddress(savedAd.getAddress());
-        this.notificationService.newAdNotificationToCustomers(profileList, savedAd);
+        this.notificationService.newAdNotificationToCustomers(savedAd);
         return savedAd;
-
-
     }
-
 
     @Override
     public Stream<Ad> search(final SearchParamsDTO searchParams, final int page, final int size) {
@@ -160,7 +154,6 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         this.updateViews(ad.getId());
         return ad;
     }
-
 
     private void updateViews(final String id) {
         final Query query = new Query(where("id").is(id));
