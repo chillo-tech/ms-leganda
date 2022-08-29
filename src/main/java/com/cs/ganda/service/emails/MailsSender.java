@@ -54,8 +54,10 @@ public class MailsSender {
         helper.setFrom(eParams.getFrom());
         helper.setSubject(eParams.getSubject());
         helper.setText(eParams.getMessage(), isHtml);
-        if (eParams.getCc().size() > 0) {
-            helper.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
+        if (eParams.getCc() != null) {
+            if (eParams.getCc().size() > 0) {
+                helper.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
+            }
         }
         this.mailSender.send(message);
     }
@@ -68,8 +70,10 @@ public class MailsSender {
         mailMessage.setFrom(eParams.getFrom());
         mailMessage.setSubject(eParams.getSubject());
         mailMessage.setText(eParams.getMessage());
-        if (eParams.getCc().size() > 0) {
-            mailMessage.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
+        if (eParams.getCc() != null) {
+            if (eParams.getCc().size() > 0) {
+                mailMessage.setCc(eParams.getCc().toArray(new String[eParams.getCc().size()]));
+            }
         }
         this.mailSender.send(mailMessage);
     }

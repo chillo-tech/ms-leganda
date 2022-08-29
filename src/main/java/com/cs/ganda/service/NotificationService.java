@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class NotificationService {
     private final MailsService mailService;
     private final SmsService smsService;
-    private String sms;
 
     public NotificationService(final MailsService mailService, final SmsService smsService) {
         this.mailService = mailService;
