@@ -18,4 +18,5 @@ public class SearchParamsDTO {
 
     private String types = "address";
     private String proximity;
+    private String origin;
 }

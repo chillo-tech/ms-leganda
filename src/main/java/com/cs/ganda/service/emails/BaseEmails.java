@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.Boolean.TRUE;
 
@@ -63,8 +61,6 @@ public class BaseEmails {
     }
 
     public Email newPublication(final Ad ad, final List<String> emails) {
-
-
         final Map<String, Object> replacements = new HashMap<>();
         replacements.put(TITRE, "Une annonce vient d'être créée");
         replacements.put(MESSAGE, "Près de chez vous!!!");
@@ -82,7 +78,8 @@ public class BaseEmails {
         final String message = this.eMailContentBuilder.getTemplate(template, replacements);
         final Email email = new Email(this.from, replacements.get(EMAIL_DESTINATAIRE).toString(), replacements.get(TITRE).toString(), message);
         if (replacements.get(EMAIL_CCI) != null) {
-            email.setCci(Stream.of(replacements.get(EMAIL_CCI)).map(Object::toString).collect(Collectors.toList()));
+            final List<String> cci = (List<String>) replacements.get(EMAIL_CCI);
+            email.setCci(cci);
         }
         email.setHtml(TRUE);
         return email;

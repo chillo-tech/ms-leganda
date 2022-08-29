@@ -6,7 +6,11 @@ import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.enums.Status;
 import com.cs.ganda.repository.AdRepository;
-import com.cs.ganda.service.*;
+import com.cs.ganda.service.AdService;
+import com.cs.ganda.service.CommonsMethods;
+import com.cs.ganda.service.ImageService;
+import com.cs.ganda.service.NotificationService;
+import com.cs.ganda.service.ProfileService;
 import com.cs.ganda.service.emails.MailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -95,20 +99,14 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
 
         ad.setCreation(Instant.now());
         final Ad savedAd = this.adRepository.save(ad);
-
         this.mailsService.newPublication(savedAd);
-
         this.imageService.saveAdImages(ad);
-        final List<Profile> profileList = this.profileService.findByAddress(savedAd.getAddress());
-        this.notificationService.newAdNotificationToCustomers(profileList, savedAd);
+        this.notificationService.newAdNotificationToCustomers(savedAd);
         return savedAd;
-
-
     }
 
-
     @Override
-    public List<Ad> search(final SearchParamsDTO searchParams, final int page, final int size) {
+    public Stream<Ad> search(final SearchParamsDTO searchParams, final int page, final int size) {
         log.info("Recherche avec les critères {} {} {}", searchParams, page, size);
         final Instant date = Instant.now();
         final Query query = new Query(Criteria.where("active").is(TRUE));
@@ -138,7 +136,7 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
 
         final Pageable pageRequest = PageRequest.of(page, size, Sort.by(ASC, "validity.start"));
         query.with(pageRequest);
-        return this.mongoTemplate.find(query, Ad.class);
+        return this.mongoTemplate.find(query, Ad.class).stream();
     }
 
     @Override
@@ -156,7 +154,6 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
         this.updateViews(ad.getId());
         return ad;
     }
-
 
     private void updateViews(final String id) {
         final Query query = new Query(where("id").is(id));

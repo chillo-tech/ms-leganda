@@ -3,6 +3,7 @@ on:
     branches:
       #- develop
       - deploiement
+      - notification
   workflow_dispatch:
 
 env:

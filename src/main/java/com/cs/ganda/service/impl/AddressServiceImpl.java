@@ -11,8 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Slf4j
@@ -30,13 +29,13 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
     }
 
     @Override
-    public Set<Address> search(String query, String mapBoxtypes, String proximity, boolean autocomplete) {
+    public Stream<Address> search(String query, String mapBoxtypes, String origin, boolean autocomplete) {
         SearchParamsDTO searchParams = new SearchParamsDTO();
         searchParams.setTypes(mapBoxtypes);
-        if (proximity.isEmpty()) {
-            searchParams.setProximity(proximity);
+        if (origin.isEmpty()) {
+            searchParams.setOrigin(origin);
         }
-        String response = this.mapBoxClient.search(query, searchParams);
+        String response = this.mapBoxClient.search(query.replaceAll(" ", "-"), searchParams);
         JSONObject json = new JSONObject(response);
         JSONArray features = json.getJSONArray("features");
 
@@ -61,7 +60,7 @@ public class AddressServiceImpl extends CRUDServiceImpl<Address, String> impleme
 
                     address.setLocation(new Location(type, latLong));
                     return address;
-                }).collect(Collectors.toSet());
+                });
     }
 
 }

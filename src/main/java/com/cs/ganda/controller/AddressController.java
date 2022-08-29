@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -25,11 +25,11 @@ public class AddressController extends ApplicationController<Address, String> {
 
     @GetMapping
     public @ResponseBody
-    Set<Address> search(
+    Stream<Address> search(
             @RequestParam String query,
             @RequestParam(defaultValue = "address") String types,
             @RequestParam(required = false) String proximity,
-            @RequestParam(defaultValue = "false") boolean autocomplete
+            @RequestParam(defaultValue = "true") boolean autocomplete
     ) {
         return this.addressService.search(query, types, proximity, autocomplete);
     }
