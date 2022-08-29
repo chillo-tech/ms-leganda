@@ -18,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -50,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
+                .antMatchers(POST, "/v*/ad/search").permitAll()
                 .antMatchers(POST, "/v*/signin").permitAll()
                 .antMatchers(POST, "/v*/add-profile").permitAll()
                 .antMatchers(POST, "/v*/activate").permitAll()
@@ -57,6 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST, "/v*/refresh-token").permitAll()
                 .antMatchers(POST, "/v*/update-user-profile").permitAll()
                 .antMatchers(POST, "/v*/phone-activation-code").permitAll()
+                .antMatchers(GET, "/v*/city").permitAll()
+                .antMatchers(GET, "/v*/address").permitAll()
+                .antMatchers(GET, "/v*/category").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().httpBasic();
@@ -66,6 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity
+                .cors()
+                .and()
                 .headers()
                 .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
                 .cacheControl();

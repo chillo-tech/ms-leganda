@@ -2,9 +2,8 @@ server:
   host: http://localhost:3000
 account:
   activation:
-    send: true
+    send: false
     code: "101010"
-
 management:
   trace:
     http.enabled: true

@@ -2,6 +2,7 @@ package com.cs.ganda.service.impl;
 
 import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.Ad;
+import com.cs.ganda.document.Address;
 import com.cs.ganda.document.Profile;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.enums.Status;
@@ -145,6 +146,11 @@ public class AdServiceImpl extends CRUDServiceImpl<Ad, String> implements AdServ
                 .findAllByProfileIdIn(ids)
                 .filter(ad -> ad.getValidity().getStart().isAfter(Instant.now()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Stream<Address> findAdress(int size) {
+        return this.adRepository.findAll().stream().map(Ad::getAddress);
     }
 
     @Override

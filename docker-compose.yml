@@ -5,7 +5,7 @@ services:
     restart: always
     image: IMAGE_NAME
     ports:
-      - "27190:9091"
+      - "27190:9090"
     networks:
       - applications-network
     environment:

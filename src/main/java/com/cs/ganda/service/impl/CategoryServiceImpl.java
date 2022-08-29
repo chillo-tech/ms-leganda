@@ -1,6 +1,5 @@
 package com.cs.ganda.service.impl;
 
-import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.Category;
 import com.cs.ganda.dto.AuthenticationRequest;
 import com.cs.ganda.repository.CategoryRepository;
@@ -16,7 +15,7 @@ import java.util.List;
 public class CategoryServiceImpl extends CRUDServiceImpl<Category, String> implements CategoryService {
     CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(final CategoryRepository categoryRepository) {
         super(categoryRepository);
         this.categoryRepository = categoryRepository;
     }
@@ -29,11 +28,12 @@ public class CategoryServiceImpl extends CRUDServiceImpl<Category, String> imple
 
     @Override
     public List<Category> findAll() {
-        return categoryRepository.findAll();
+        log.info("Liste des catégories");
+        return this.categoryRepository.findAll();
     }
 
     @Override
-    public void signin(AuthenticationRequest authenticationRequest, HttpServletResponse response) {
+    public void signin(final AuthenticationRequest authenticationRequest, final HttpServletResponse response) {
 
     }
 }

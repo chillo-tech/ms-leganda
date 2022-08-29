@@ -26,10 +26,11 @@ public class AddressController extends ApplicationController<Address, String> {
     @GetMapping
     public @ResponseBody
     Stream<Address> search(
-            @RequestParam String query,
+            @RequestParam(required = false) String query,
             @RequestParam(defaultValue = "address") String types,
             @RequestParam(required = false) String proximity,
-            @RequestParam(defaultValue = "true") boolean autocomplete
+            @RequestParam(defaultValue = "true") boolean autocomplete,
+            @RequestParam(defaultValue = "10") int limit
     ) {
         return this.addressService.search(query, types, proximity, autocomplete);
     }

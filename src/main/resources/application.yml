@@ -1,16 +1,11 @@
-account:
-  activation:
-    send: false
-    code: "101010"
-
 server:
-  port: 9091
+  port: 9090
   servlet:
     context-path: /api
   session.tracking-modes: 'cookie'
 mongock:
   migration-scan-package:
-  - com.cs.ganda.config.db.changelog
+    - com.cs.ganda.config.db.changelog
 spring:
   application:
     name: ms-leganda
@@ -22,18 +17,18 @@ spring:
   thymeleaf:
     cache: false
   mail:
-#     host: smtp.gmail.com
-#     port: 587
-#     username: katyberte2@gmail.com
-#     password: srewjmweyjermxxi
-#     default-encoding: UTF-8
-#     protocol: smtp
-#     test-connection: false
+    host: smtp.gmail.com
+    port: 587
+    username: katyberte2@gmail.com
+    password: srewjmweyjermxxi
+    default-encoding: UTF-8
+    protocol: smtp
+    test-connection: false
     accountLink: http://localhost:9090/activer-mon-compte?code=
-    activation-url:  http://localhost:9090/activate
-    new-password-url:  http://localhost:9090/nouveau-mot-de-passe
-    annonces-url:  http://localhost:9090/annonces
-    paiement-url:  http://localhost:9090/compte/paiement
+    activation-url: http://localhost:9090/activate
+    new-password-url: http://localhost:9090/nouveau-mot-de-passe
+    annonces-url: http://localhost:9090/annonces
+    paiement-url: http://localhost:9090/compte/paiement
     properties:
       mail:
         smtp:
@@ -44,9 +39,9 @@ spring:
             enable: true
   sms:
     twilo:
-      sid: ACcbb01f55e3469ff5eea683ebc1aac50f
-      token: 1543e11fdc238805c44e621af48949df
-      vaid: VAe62952bb863b850e20fb3caa82451131
+      sid: AC81cafcedc67eee11e22f851564f7ea75
+      token: 97d7b7977d9c0d87794f5822829ac85f
+      vaid: VA3c284c8d40842e2fe52eda6190cadaa2
 jwt:
   header: "Authorization"
   accessToken: "accessToken"

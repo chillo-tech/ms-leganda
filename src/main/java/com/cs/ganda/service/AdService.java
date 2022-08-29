@@ -2,6 +2,7 @@ package com.cs.ganda.service;
 
 import com.cs.ganda.document.ActivationData;
 import com.cs.ganda.document.Ad;
+import com.cs.ganda.document.Address;
 import com.cs.ganda.dto.SearchParamsDTO;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface AdService extends CRUDService<Ad, String> {
     Stream<Ad> search(SearchParamsDTO searchParams, int page, int size);
 
     List<Ad> findAllByProfileIdIn(List<String> ids);
+
+    Stream<Address> findAdress(int size);
 }

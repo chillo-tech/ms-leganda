@@ -67,39 +67,41 @@ public class AccountServiceImpl implements AccountService {
     @Value("${account.activation.code}")
     private String accountActivationCode;
 
-    public void resetPassword(PasswordData passwordData) {
+    @Override
+    public void resetPassword(final PasswordData passwordData) {
         Objects.requireNonNull(passwordData.getPassword(), String.format(MISSING_FIELD, "mot de passe"));
         Objects.requireNonNull(passwordData.getConfirmation(), String.format(MISSING_FIELD, "confirmation"));
 
-        ConfirmationToken confirmationToken = this.confirmationTokenService.getConfirmationToken(passwordData.getToken());
+        final ConfirmationToken confirmationToken = this.confirmationTokenService.getConfirmationToken(passwordData.getToken());
         final Profile profile = confirmationToken.getProfile();
         if (!passwordData.getConfirmation().equals(passwordData.getPassword())) {
             throw new IllegalArgumentException(String.format(ACCOUNT_NOT_EXISTS, "l'information", "transmise"));
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(passwordData.getPassword());
+        final String encodedPassword = this.bCryptPasswordEncoder.encode(passwordData.getPassword());
         profile.setPassword(encodedPassword);
         confirmationToken.setConfirmedAt(Instant.now());
     }
 
-    public void register(Profile profile) {
+    @Override
+    public void register(final Profile profile) {
         Objects.requireNonNull(profile.getFirstName(), String.format(MISSING_FIELD, "Prénom"));
         Objects.requireNonNull(profile.getLastName(), String.format(MISSING_FIELD, "Nom"));
         Objects.requireNonNull(profile.getPassword(), String.format(MISSING_FIELD, "mode de passe"));
 
-        if (commonsMethods.stringIsNullOrEmpty(profile.getEmail()) && commonsMethods.stringIsNullOrEmpty(profile.getPhone())) {
+        if (this.commonsMethods.stringIsNullOrEmpty(profile.getEmail()) && this.commonsMethods.stringIsNullOrEmpty(profile.getPhone())) {
             Objects.requireNonNull(profile.getPhone(), String.format(MISSING_FIELD, "Téléphone"));
             Objects.requireNonNull(profile.getEmail(), String.format(MISSING_FIELD, "mail"));
-            if (!userNameValidator.test(profile.getEmail())) {
+            if (!this.userNameValidator.test(profile.getEmail())) {
                 throw new IllegalArgumentException(String.format(EMAIL_INVALID, profile.getEmail()));
             }
         }
 
-        Profile profileByPhone = profilRepository.findByPhone(profile.getPhone()).orElse(null);
+        final Profile profileByPhone = this.profilRepository.findByPhone(profile.getPhone()).orElse(null);
         if (profileByPhone != null) {
             throw new IllegalArgumentException(String.format(ACCOUNT_EXISTS, "le téléphone", profile.getPhone()));
         }
 
-        Profile profileByEmail = profilRepository.findByEmail(profile.getEmail()).orElse(null);
+        final Profile profileByEmail = this.profilRepository.findByEmail(profile.getEmail()).orElse(null);
         if (profileByEmail != null) {
             throw new IllegalArgumentException(String.format(ACCOUNT_EXISTS, "le mail", profile.getEmail()));
         }
@@ -108,18 +110,19 @@ public class AccountServiceImpl implements AccountService {
             profile.setRoles(Set.of(UserRole.USER));
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(profile.getPassword());
+        final String encodedPassword = this.bCryptPasswordEncoder.encode(profile.getPassword());
         profile.setPassword(encodedPassword);
-        profileService.register(profile);
+        this.profileService.register(profile);
     }
 
-    public AuthenticationData login(AuthenticationRequest authenticationRequest) {
-        String usermame = authenticationRequest.getPhone();
-        String password = authenticationRequest.getPassword();
+    @Override
+    public AuthenticationData login(final AuthenticationRequest authenticationRequest) {
+        final String usermame = authenticationRequest.getPhone();
+        final String password = authenticationRequest.getPassword();
         Objects.requireNonNull(password, String.format(MISSING_FIELD, "mot de passe"));
         Objects.requireNonNull(usermame, String.format(MISSING_FIELD, "mail"));
 
-        Optional<Profile> optionalProfile = profilRepository.findByPhoneAndPhoneIndex(authenticationRequest.getPhone(), authenticationRequest.getPhoneIndex());
+        final Optional<Profile> optionalProfile = this.profilRepository.findByPhoneAndPhoneIndex(authenticationRequest.getPhone(), authenticationRequest.getPhoneIndex());
         System.out.println(optionalProfile.isEmpty());
         if (optionalProfile.isEmpty()) {
             throw new IllegalArgumentException(String.format(ACCOUNT_NOT_EXISTS, "l'email", usermame));
@@ -128,44 +131,46 @@ public class AccountServiceImpl implements AccountService {
         return this.getAuthenticationData(optionalProfile.get());
     }
 
-    public void activate(ActivationData activationData) {
+    @Override
+    public void activate(final ActivationData activationData) {
         Objects.requireNonNull(activationData.getToken(), String.format(MISSING_FIELD, "token"));
-        ConfirmationToken confirmationToken = confirmationTokenService.activateByToken(
+        final ConfirmationToken confirmationToken = this.confirmationTokenService.activateByToken(
                 activationData.getToken()
         );
-        Profile profile = confirmationToken.getProfile();
+        final Profile profile = confirmationToken.getProfile();
 
-        Query query = new Query();
+        final Query query = new Query();
         query.addCriteria(
                 Criteria.where("phone").is(profile.getPhone())
                         .orOperator(Criteria.where("email").is(profile.getEmail()))
         );
 
-        Profile inactiveProfile = this.mongoTemplate.findOne(query, Profile.class);
+        final Profile inactiveProfile = this.mongoTemplate.findOne(query, Profile.class);
         inactiveProfile.setActive(TRUE);
         this.mongoTemplate.save(inactiveProfile);
     }
 
-    public void resetPasswordLink(String email) {
-        if (!userNameValidator.test(email)) {
+    @Override
+    public void resetPasswordLink(final String email) {
+        if (!this.userNameValidator.test(email)) {
             throw new IllegalArgumentException(String.format(EMAIL_INVALID, email));
         }
 
-        Optional<Profile> optionalProfile = profilRepository.findByEmail(email);
+        final Optional<Profile> optionalProfile = this.profilRepository.findByEmail(email);
         if (optionalProfile.isEmpty()) {
             throw new IllegalArgumentException(String.format(ACCOUNT_NOT_EXISTS, "l'email", email));
         }
-        if (sendAccountActivationCode) {
+        if (this.sendAccountActivationCode) {
             this.confirmationTokenService.sendActivationCode(optionalProfile.get());
         }
     }
 
     @Override
-    public void phoneActivationCode(ActivationData activationData) {
+    public void phoneActivationCode(final ActivationData activationData) {
         Profile currentProfile = null;
         try {
-            currentProfile = profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
-        } catch (UsernameNotFoundException exception) {
+            currentProfile = this.profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
+        } catch (final UsernameNotFoundException exception) {
             log.info("Nouvel utilisateur avec {} {}", activationData.getPhoneIndex(), activationData.getPhone());
         }
         if (currentProfile == null) {
@@ -174,61 +179,62 @@ public class AccountServiceImpl implements AccountService {
             currentProfile.setPhone(activationData.getPhone());
         }
         this.profileService.register(currentProfile);
-        if (sendAccountActivationCode) {
+        if (this.sendAccountActivationCode) {
             this.confirmationTokenService.sendActivationCode(activationData);
         }
     }
 
     @Override
-    public AuthenticationData updateProfile(Profile profile) {
-        Profile currentProfile = profileService.findByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
+    public AuthenticationData updateProfile(final Profile profile) {
+        final Profile currentProfile = this.profileService.findByPhoneAndPhoneIndex(profile.getPhone(), profile.getPhoneIndex());
         currentProfile.setPhoneActive(TRUE);
         currentProfile.setActive(TRUE);
         currentProfile.setFirstName(profile.getFirstName());
         currentProfile.setLastName(profile.getLastName());
         currentProfile.setEmail(profile.getEmail());
 
-        Profile updatedProfile = this.profileService.update(currentProfile);
-        return getAuthenticationData(updatedProfile);
+        final Profile updatedProfile = this.profileService.update(currentProfile);
+        return this.getAuthenticationData(updatedProfile);
     }
 
     @Override
-    public AuthenticationData refreshToken(Map<String, String> data) {
-        AuthenticationData authenticationData = this.authenticationDataService.findByRefreshoken(data.get(refreshToken));
-        Profile profile = this.profileService.findById(authenticationData.getUserId());
+    public AuthenticationData refreshToken(final Map<String, String> data) {
+        final AuthenticationData authenticationData = this.authenticationDataService.findByRefreshoken(data.get(this.refreshToken));
+        final Profile profile = this.profileService.findById(authenticationData.getUserId());
         return this.getAuthenticationData(profile);
     }
 
     @Override
-    public void updateAddress(Address address) {
+    public void updateAddress(final Address address) {
         this.profileService.updateAddress(address);
     }
 
     @Override
-    public AuthenticationData activatePhone(ActivationData activationData) {
+    public AuthenticationData activatePhone(final ActivationData activationData) {
         AuthenticationData authenticationData = new AuthenticationData();
-        Profile profile = this.profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
+        final Profile profile = this.profileService.findByPhoneAndPhoneIndex(activationData.getPhone(), activationData.getPhoneIndex());
         String activationStatus = null;
-        if (sendAccountActivationCode) {
+        log.info("Validation du code {} {} en local {} ", activationData.getToken(), this.accountActivationCode, this.sendAccountActivationCode);
+        if (this.sendAccountActivationCode) {
             activationStatus = this.confirmationTokenService.activatePhone(activationData);
-        } else if (activationData.getToken().equals(accountActivationCode)) {
+        } else if (activationData.getToken().equals(this.accountActivationCode)) {
             activationStatus = "approved";
         }
         if (!activationStatus.equals("approved")) {
             throw new IllegalArgumentException(CODE_INVALID);
         }
         profile.setPhoneActive(TRUE);
-        Profile updatedProfile = this.profileService.update(profile);
+        final Profile updatedProfile = this.profileService.update(profile);
         if (!Strings.isNullOrEmpty(updatedProfile.getLastName()) || !Strings.isNullOrEmpty(updatedProfile.getFirstName())) {
             authenticationData = this.getAuthenticationData(updatedProfile);
         }
         return authenticationData;
     }
 
-    private AuthenticationData getAuthenticationData(Profile updatedProfile) {
-        AuthenticationData authenticationData = new AuthenticationData();
-        String accessToken = this.jwtTokenUtil.generateToken(updatedProfile);
-        String refreshToken = commonsMethods.getRefreshToken();
+    private AuthenticationData getAuthenticationData(final Profile updatedProfile) {
+        final AuthenticationData authenticationData = new AuthenticationData();
+        final String accessToken = this.jwtTokenUtil.generateToken(updatedProfile);
+        final String refreshToken = this.commonsMethods.getRefreshToken();
         authenticationData.setCreation(Instant.now());
         authenticationData.setAccessToken(accessToken);
         authenticationData.setRefreshToken(refreshToken);

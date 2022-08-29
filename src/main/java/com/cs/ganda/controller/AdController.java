@@ -5,6 +5,7 @@ import com.cs.ganda.document.Ad;
 import com.cs.ganda.dto.SearchParamsDTO;
 import com.cs.ganda.service.AdService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class AdController extends ApplicationController<Ad, String> {
         this.service = service;
     }
 
-    @PostMapping(value = "/search")
+    @PostMapping(path = "/search", consumes = APPLICATION_JSON_VALUE)
     public @ResponseBody
     Stream<Ad> search(
             @RequestBody SearchParamsDTO searchParams,

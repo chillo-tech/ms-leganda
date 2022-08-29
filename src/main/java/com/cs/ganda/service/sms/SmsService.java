@@ -79,12 +79,11 @@ public class SmsService {
         sms += "description de l'annonce :" + ad.getDescription() + "\n";
         sms += "par :" + ad.getProfile().getLastName() + " " + ad.getProfile().getFirstName() + "\n\n\n";
         sms += "LE GANDA votre coin qualité ";
-
         final String finalSms = sms;
         Twilio.init(this.ACCOUNT_SID, this.AUTH_TOKEN);
 
         phones.stream().map(PhoneNumber::new).forEach(mappedPhone -> {
-            final Message message = Message.creator(mappedPhone, new PhoneNumber("+33761705745"), finalSms)
+            final Message message = Message.creator(mappedPhone, new PhoneNumber("+18158599560"), finalSms)
                     .create();
 
             log.info(String.format("l'id du message envoyé à %s est %s", mappedPhone, message.getSid()));

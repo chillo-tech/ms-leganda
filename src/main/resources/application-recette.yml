@@ -1,5 +1,9 @@
 server:
   host: http://api.leganda.chillo.fr
+account:
+  activation:
+    send: false
+    code: "101010"
 spring:
   data:
     mongodb:
