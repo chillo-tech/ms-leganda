@@ -1,0 +1,37 @@
+server:
+  port: 9091
+  servlet:
+    context-path: /api
+  session.tracking-modes: 'cookie'
+
+spring:
+  application:
+    name: ms-notification
+  thymeleaf:
+    cache: false
+  sms:
+    twilo:
+      sid: AC81cafcedc67eee11e22f851564f7ea75
+      token: aac89fa47c8fea2c273b1a905548af66
+      vaid: VA3c284c8d40842e2fe52eda6190cadaa2
+
+jwt:
+  header: "Authorization"
+  accessToken: "accessToken"
+  refreshToken: "refreshToken"
+  infos: "USER_INFOS"
+  secret: "TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
+  expiration: 3600 # (secondes) == 1 heure
+  route:
+    authentication:
+      path: "/login"
+      refresh: "/refresh"
+logging:
+  pattern:
+    file: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
+    console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
+  level:
+    ROOT: INFO
+    com.cs.ganda.: INFO
+feign.client.config.default.loggerLevel: BASIC
+
