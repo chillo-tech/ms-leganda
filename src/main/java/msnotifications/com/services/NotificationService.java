@@ -14,11 +14,11 @@ public class NotificationService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://d7sms.p.rapidapi.com/messages/v1/send"))
                 .header("content-type", "application/json")
-                .header("Token", "undefined")
-                .header("X-RapidAPI-Key", "SIGN-UP-FOR-KEY")
+                .header("Token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoLWJhY2tlbmQ6YXBwIiwic3ViIjoiYzE3NGFjMDYtZDgyZC00YzMxLWFmZjMtNjg5NTQxMTM2NDU0In0.bMBkojoU7YbNGyh0mGYZlqnquuvc_ZtRisseoxPGeyM")
+                .header("X-RapidAPI-Key", "sxtGgEHICMjHaaHt09kEjfrgYqvOcAKFGbivgv55dkwXOc2QZNe5jioozaikY2LJfURSYegAH1sd6tULVKgQwhxPngpObamsbXQS9LNKapLzT0LC1b6XRs4wF431qd0M")
                 .header("X-RapidAPI-Host", "d7sms.p.rapidapi.com")
                 .method("POST", HttpRequest.BodyPublishers.ofString(
-                        "{\r\n    \"messages\": [\r\n        {\r\n            \"channel\": \"sms\",\r\n            \"originator\": \"SMS\",\r\n            \"recipients\": [\r\n                \"+971509752655\",\r\n                \"+9715097526xx\"\r\n            ],\r\n            \"content\": \"Greetings from D7 API \",\r\n            \"msg_type\": \"text\"\r\n        }\r\n    ]\r\n}"))
+                        "{\r\n    \"messages\": [\r\n        {\r\n            \"channel\": \"sms\",\r\n            \"originator\": \"SMS\",\r\n            \"recipients\": [\r\n                \"+33758001997\",\r\n                ],\r\n            \"content\": \"Greetings from D7 API \",\r\n            \"msg_type\": \"text\"\r\n        }\r\n    ]\r\n}"))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());

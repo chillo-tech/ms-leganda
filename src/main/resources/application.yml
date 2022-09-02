@@ -9,11 +9,8 @@ spring:
     name: ms-notification
   thymeleaf:
     cache: false
-  sms:
-    twilo:
-      sid: AC81cafcedc67eee11e22f851564f7ea75
-      token: aac89fa47c8fea2c273b1a905548af66
-      vaid: VA3c284c8d40842e2fe52eda6190cadaa2
+
+
 
 jwt:
   header: "Authorization"
